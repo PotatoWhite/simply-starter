@@ -4,5 +4,11 @@ io/crcell/pramework/utils/GsonTools.java
  io.crcell.pramework.utils.GsonTools$ArrayStrategy
  io.crcell.pramework.utils.GsonTools$ConflictStrategy
  io.crcell.pramework.utils.GsonTools$JsonObjectExtensionConflictException
-io/crcell/pramework/BaseService.java
- io.crcell.pramework.BaseService
+io/crcell/pramework/serviceable/ServiceableImpl.java
+ io.crcell.pramework.serviceable.ServiceableImpl
+io/crcell/pramework/controllable/ControllableImpl.java
+ io.crcell.pramework.controllable.ControllableImpl
+io/crcell/pramework/controllable/Controllable.java
+ io.crcell.pramework.controllable.Controllable
+io/crcell/pramework/serviceable/Serviceable.java
+ io.crcell.pramework.serviceable.Serviceable

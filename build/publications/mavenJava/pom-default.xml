@@ -8,12 +8,17 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.crcell</groupId>
   <artifactId>serviceable</artifactId>
-  <version>0.0.16-SNAPSHOT</version>
+  <version>0.0.18-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.8.6</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
