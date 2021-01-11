@@ -25,5 +25,5 @@ public interface Serviceable<T1, T2> {
 
 
   // replace
-  Optional<T1> replace(T1 replace);
+  Optional<T1> replace(T2 id, T1 replace);
 }

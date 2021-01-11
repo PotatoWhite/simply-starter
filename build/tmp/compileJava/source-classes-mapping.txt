@@ -20,5 +20,7 @@ io/crcell/pramework/eventable/EventableEntity.java
  io.crcell.pramework.eventable.EventableEntity
  io.crcell.pramework.eventable.EventableEntity$EventableEntityBuilder
  io.crcell.pramework.eventable.EventableEntity$Type
+io/crcell/pramework/eventable/config/EventableConfig.java
+ io.crcell.pramework.eventable.config.EventableConfig
 io/crcell/pramework/eventable/repository/EventableAspect.java
  io.crcell.pramework.eventable.repository.EventableAspect

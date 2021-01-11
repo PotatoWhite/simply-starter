@@ -41,7 +41,7 @@ public abstract class ControllableImpl<T1, T2> implements Controllable<T1, T2> {
   @PutMapping("/{id}")
   public ResponseEntity replaceById(@PathVariable T2 id, @RequestBody @Valid T1 replace) {
     try {
-      return (ResponseEntity) service.replace(replace)
+      return (ResponseEntity) service.replace(id, replace)
                                      .map(replaced -> ResponseEntity.status(HttpStatus.OK)
                                                                     .body(replaced))
                                      .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

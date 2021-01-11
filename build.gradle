@@ -11,7 +11,7 @@ bootJar.enabled(false)
 jar.enabled(true)
 
 group 'io.crcell'
-version '0.0.19-SNAPSHOT'
+version '0.0.21-SNAPSHOT'
 
 
 repositories {
@@ -34,6 +34,7 @@ publishing {
 
 
 dependencies {
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.12'
     implementation('com.google.code.gson:gson:2.8.6')
     implementation 'org.springframework.kafka:spring-kafka'
 

@@ -1,6 +1,7 @@
 package io.crcell.pramework.serviceable;
 
 import io.crcell.pramework.utils.GsonTools;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityExistsException;
@@ -54,7 +55,11 @@ public abstract class ServiceableImpl<T1, T2> implements Serviceable<T1, T2> {
 
   // replace
   @Override
-  public Optional<T1> replace(T1 replace) {
-    return Optional.ofNullable(repository.save(replace));
+  public Optional<T1> replace(T2 id, T1 replace) {
+    return (Optional<T1>) repository.findById(id)
+                                    .map(retrieved -> {
+                                      BeanUtils.copyProperties(replace, retrieved, "id");
+                                      return Optional.ofNullable(repository.save(retrieved));
+                                    });
   }
 }
