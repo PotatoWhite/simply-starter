@@ -4,11 +4,21 @@ io/crcell/pramework/utils/GsonTools.java
  io.crcell.pramework.utils.GsonTools$ArrayStrategy
  io.crcell.pramework.utils.GsonTools$ConflictStrategy
  io.crcell.pramework.utils.GsonTools$JsonObjectExtensionConflictException
+io/crcell/pramework/eventable/repository/EventableRepository.java
+ io.crcell.pramework.eventable.repository.EventableRepository
 io/crcell/pramework/serviceable/ServiceableImpl.java
  io.crcell.pramework.serviceable.ServiceableImpl
+io/crcell/pramework/eventable/Eventable.java
+ io.crcell.pramework.eventable.Eventable
 io/crcell/pramework/controllable/ControllableImpl.java
  io.crcell.pramework.controllable.ControllableImpl
 io/crcell/pramework/controllable/Controllable.java
  io.crcell.pramework.controllable.Controllable
 io/crcell/pramework/serviceable/Serviceable.java
  io.crcell.pramework.serviceable.Serviceable
+io/crcell/pramework/eventable/EventableEntity.java
+ io.crcell.pramework.eventable.EventableEntity
+ io.crcell.pramework.eventable.EventableEntity$EventableEntityBuilder
+ io.crcell.pramework.eventable.EventableEntity$Type
+io/crcell/pramework/eventable/repository/EventableAspect.java
+ io.crcell.pramework.eventable.repository.EventableAspect
