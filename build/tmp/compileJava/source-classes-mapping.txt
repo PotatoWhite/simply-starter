@@ -10,6 +10,8 @@ io/crcell/pramework/serviceable/ServiceableImpl.java
  io.crcell.pramework.serviceable.ServiceableImpl
 io/crcell/pramework/eventable/Eventable.java
  io.crcell.pramework.eventable.Eventable
+io/crcell/pramework/eventable/EnableEventable.java
+ io.crcell.pramework.eventable.EnableEventable
 io/crcell/pramework/controllable/ControllableImpl.java
  io.crcell.pramework.controllable.ControllableImpl
 io/crcell/pramework/controllable/Controllable.java

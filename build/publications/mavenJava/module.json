@@ -1,0 +1,102 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.crcell",
+    "module": "serviceable",
+    "version": "0.0.29-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.7.1",
+      "buildId": "t7ehnpcnzzel3p7jgk6jdb2z2y"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.reflections",
+          "module": "reflections",
+          "version": {
+            "requires": "0.9.12"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "serviceable-0.0.29-SNAPSHOT.jar",
+          "url": "serviceable-0.0.29-SNAPSHOT.jar",
+          "size": 21156,
+          "sha512": "3ad1390b667952fd2d7d772e22c9931c9fbfb65da011efcb748921fc232002cf7943cf8fce54f674caf6069e119b068983f9f34167a14c9f093892303fa8eb8d",
+          "sha256": "91fcc86a49d4d99f1f9896a208e065d7ef3b887b9f466e4806df43c324373cf5",
+          "sha1": "aea143cb6b9e4793273fc69ce87d168141eba219",
+          "md5": "434cd0397cd84ee1a5ff6d0474b21254"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.8.6"
+          }
+        },
+        {
+          "group": "org.springframework.kafka",
+          "module": "spring-kafka"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-data-jpa"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-validation"
+        },
+        {
+          "group": "org.reflections",
+          "module": "reflections",
+          "version": {
+            "requires": "0.9.12"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "serviceable-0.0.29-SNAPSHOT.jar",
+          "url": "serviceable-0.0.29-SNAPSHOT.jar",
+          "size": 21156,
+          "sha512": "3ad1390b667952fd2d7d772e22c9931c9fbfb65da011efcb748921fc232002cf7943cf8fce54f674caf6069e119b068983f9f34167a14c9f093892303fa8eb8d",
+          "sha256": "91fcc86a49d4d99f1f9896a208e065d7ef3b887b9f466e4806df43c324373cf5",
+          "sha1": "aea143cb6b9e4793273fc69ce87d168141eba219",
+          "md5": "434cd0397cd84ee1a5ff6d0474b21254"
+        }
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@ bootJar.enabled(false)
 jar.enabled(true)
 
 group 'io.crcell'
-version '0.0.21-SNAPSHOT'
+version '0.0.29-SNAPSHOT'
 
 
 repositories {
