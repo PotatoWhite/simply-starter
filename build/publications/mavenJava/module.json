@@ -3,7 +3,7 @@
   "component": {
     "group": "io.crcell",
     "module": "serviceable",
-    "version": "0.0.29-SNAPSHOT",
+    "version": "0.0.36-SNAPSHOT",
     "attributes": {
       "org.gradle.status": "integration"
     }
@@ -11,7 +11,7 @@
   "createdBy": {
     "gradle": {
       "version": "6.7.1",
-      "buildId": "t7ehnpcnzzel3p7jgk6jdb2z2y"
+      "buildId": "hexyutksj5fytlttcnon5geihe"
     }
   },
   "variants": [
@@ -35,13 +35,13 @@
       ],
       "files": [
         {
-          "name": "serviceable-0.0.29-SNAPSHOT.jar",
-          "url": "serviceable-0.0.29-SNAPSHOT.jar",
-          "size": 21156,
-          "sha512": "3ad1390b667952fd2d7d772e22c9931c9fbfb65da011efcb748921fc232002cf7943cf8fce54f674caf6069e119b068983f9f34167a14c9f093892303fa8eb8d",
-          "sha256": "91fcc86a49d4d99f1f9896a208e065d7ef3b887b9f466e4806df43c324373cf5",
-          "sha1": "aea143cb6b9e4793273fc69ce87d168141eba219",
-          "md5": "434cd0397cd84ee1a5ff6d0474b21254"
+          "name": "serviceable-0.0.36-SNAPSHOT.jar",
+          "url": "serviceable-0.0.36-SNAPSHOT.jar",
+          "size": 20348,
+          "sha512": "c9f0bb82b994126e272a4071b70246d0d31833db449e807cd04dc06574bf38022aa1412d4ede370d1c435aaa1980377a878b2d15ce05f322c630cd509e553100",
+          "sha256": "279774f0c08038cdb8594faa77c2c7fd3835369823020921168bf43a956f1354",
+          "sha1": "8d1dc0418dd8543ffc2f59ec4544a070ad845fd8",
+          "md5": "a54f352fc1090d702c760f316b93a6cb"
         }
       ]
     },
@@ -88,13 +88,13 @@
       ],
       "files": [
         {
-          "name": "serviceable-0.0.29-SNAPSHOT.jar",
-          "url": "serviceable-0.0.29-SNAPSHOT.jar",
-          "size": 21156,
-          "sha512": "3ad1390b667952fd2d7d772e22c9931c9fbfb65da011efcb748921fc232002cf7943cf8fce54f674caf6069e119b068983f9f34167a14c9f093892303fa8eb8d",
-          "sha256": "91fcc86a49d4d99f1f9896a208e065d7ef3b887b9f466e4806df43c324373cf5",
-          "sha1": "aea143cb6b9e4793273fc69ce87d168141eba219",
-          "md5": "434cd0397cd84ee1a5ff6d0474b21254"
+          "name": "serviceable-0.0.36-SNAPSHOT.jar",
+          "url": "serviceable-0.0.36-SNAPSHOT.jar",
+          "size": 20348,
+          "sha512": "c9f0bb82b994126e272a4071b70246d0d31833db449e807cd04dc06574bf38022aa1412d4ede370d1c435aaa1980377a878b2d15ce05f322c630cd509e553100",
+          "sha256": "279774f0c08038cdb8594faa77c2c7fd3835369823020921168bf43a956f1354",
+          "sha1": "8d1dc0418dd8543ffc2f59ec4544a070ad845fd8",
+          "md5": "a54f352fc1090d702c760f316b93a6cb"
         }
       ]
     }

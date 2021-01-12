@@ -20,7 +20,6 @@ io/crcell/pramework/serviceable/Serviceable.java
  io.crcell.pramework.serviceable.Serviceable
 io/crcell/pramework/eventable/EventableEntity.java
  io.crcell.pramework.eventable.EventableEntity
- io.crcell.pramework.eventable.EventableEntity$EventableEntityBuilder
  io.crcell.pramework.eventable.EventableEntity$Type
 io/crcell/pramework/eventable/config/EventableConfig.java
  io.crcell.pramework.eventable.config.EventableConfig

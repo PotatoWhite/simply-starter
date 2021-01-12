@@ -2,6 +2,7 @@ package io.crcell.pramework.eventable.config;
 
 
 import io.crcell.pramework.eventable.Eventable;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -12,14 +13,18 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@Getter
 @RequiredArgsConstructor
 @Configuration
 public class EventableConfig {
 
   private final BeanFactory beanFactory;
+  private Map<Class, String> topics = new HashMap<>();
 
 
   @Value("${pramework.entity-base-package}")
@@ -44,6 +49,7 @@ public class EventableConfig {
 
     subTypesOf.stream()
               .forEach(item -> {
+                this.topics.put(item, item.getName());
                 NewTopic newTopic = new NewTopic(item.getName(), numPartitions, numReplicas);
                 factory.registerSingleton(item.getName()+"topic", newTopic);
                 log.info("Topic created {} : {} : {}", item.getName(), numPartitions, numReplicas);

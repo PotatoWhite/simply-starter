@@ -3,7 +3,7 @@
   <groupId>io.crcell</groupId>
   <artifactId>serviceable</artifactId>
   <versioning>
-    <latest>0.0.29-SNAPSHOT</latest>
+    <latest>0.0.36-SNAPSHOT</latest>
     <versions>
       <version>0.0.1-SNAPSHOT</version>
       <version>0.0.2-SNAPSHOT</version>
@@ -34,7 +34,13 @@
       <version>0.0.27-SNAPSHOT</version>
       <version>0.0.28-SNAPSHOT</version>
       <version>0.0.29-SNAPSHOT</version>
+      <version>0.0.30-SNAPSHOT</version>
+      <version>0.0.31-SNAPSHOT</version>
+      <version>0.0.32-SNAPSHOT</version>
+      <version>0.0.33-SNAPSHOT</version>
+      <version>0.0.35-SNAPSHOT</version>
+      <version>0.0.36-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20210111165119</lastUpdated>
+    <lastUpdated>20210112102231</lastUpdated>
   </versioning>
 </metadata>

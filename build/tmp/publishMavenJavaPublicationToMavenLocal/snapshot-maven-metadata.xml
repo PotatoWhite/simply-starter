@@ -2,27 +2,27 @@
 <metadata modelVersion="1.1.0">
   <groupId>io.crcell</groupId>
   <artifactId>serviceable</artifactId>
-  <version>0.0.29-SNAPSHOT</version>
+  <version>0.0.36-SNAPSHOT</version>
   <versioning>
     <snapshot>
       <localCopy>true</localCopy>
     </snapshot>
-    <lastUpdated>20210111165119</lastUpdated>
+    <lastUpdated>20210112102231</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
-        <extension>module</extension>
-        <value>0.0.29-SNAPSHOT</value>
-        <updated>20210111165119</updated>
+        <extension>jar</extension>
+        <value>0.0.36-SNAPSHOT</value>
+        <updated>20210112102231</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>0.0.29-SNAPSHOT</value>
-        <updated>20210111165119</updated>
+        <value>0.0.36-SNAPSHOT</value>
+        <updated>20210112102231</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <extension>jar</extension>
-        <value>0.0.29-SNAPSHOT</value>
-        <updated>20210111165119</updated>
+        <extension>module</extension>
+        <value>0.0.36-SNAPSHOT</value>
+        <updated>20210112102231</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>

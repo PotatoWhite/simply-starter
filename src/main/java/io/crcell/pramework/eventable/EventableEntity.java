@@ -1,16 +1,15 @@
 package io.crcell.pramework.eventable;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@Builder
-public class EventableEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+public class EventableEntity<T> {
   private String key;
   private Type   eventType;
-  private Object payload;
+  private T payload;
 
   public enum Type {
     SAVE, DELETE

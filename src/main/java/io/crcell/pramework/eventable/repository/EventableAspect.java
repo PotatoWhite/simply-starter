@@ -105,12 +105,7 @@ public class EventableAspect {
 
   public void publish(String topic, EventableEntity.Type type, String key, Eventable entity) {
 
-    EventableEntity message = EventableEntity.builder()
-                                             .eventType(type)
-                                             .key(key)
-                                             .payload(entity)
-                                             .build();
-
+    EventableEntity message = new EventableEntity(key, type, entity);
     kafkaTemplate.send(topic, key, message);
   }
 }
