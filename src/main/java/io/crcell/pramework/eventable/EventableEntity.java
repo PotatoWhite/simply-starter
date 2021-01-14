@@ -6,8 +6,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventableEntity<T> {
-  private String key;
+public class EventableEntity<T, ID> {
+  private ID key;
   private Type   eventType;
   private T payload;
 
