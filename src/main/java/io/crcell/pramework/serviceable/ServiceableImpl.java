@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -61,5 +62,11 @@ public abstract class ServiceableImpl<T1, T2> implements Serviceable<T1, T2> {
                                       BeanUtils.copyProperties(replace, retrieved, "id");
                                       return Optional.ofNullable(repository.save(retrieved));
                                     });
+  }
+
+
+  @Override
+  public List<T1> retrieveAll() {
+    return repository.findAll();
   }
 }

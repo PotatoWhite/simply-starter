@@ -6,9 +6,9 @@
   <!-- that they should prefer consuming it instead. -->
   <!-- do_not_remove: published-with-gradle-metadata -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>io.crcell</groupId>
+  <groupId>io.crcell.eventable</groupId>
   <artifactId>serviceable</artifactId>
-  <version>0.0.52-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.reflections</groupId>

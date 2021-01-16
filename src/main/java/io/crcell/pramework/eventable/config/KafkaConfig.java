@@ -23,8 +23,8 @@ import java.util.Set;
 @Configuration
 public class KafkaConfig {
 
-  private final BeanFactory beanFactory;
-  private Map<Class, String> topics = new HashMap<>();
+  private final BeanFactory        beanFactory;
+  private       Map<Class, String> topics = new HashMap<>();
 
 
   @Value("${pramework.entity-base-package}")

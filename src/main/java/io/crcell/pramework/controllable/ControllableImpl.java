@@ -81,6 +81,20 @@ public abstract class ControllableImpl<T1, T2> implements Controllable<T1, T2> {
   }
 
   @Override
+  @GetMapping()
+  public ResponseEntity getAll() {
+    var retrieveAll = service.retrieveAll();
+
+    if(retrieveAll.isEmpty())
+      return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                           .build();
+
+    return ResponseEntity.status(HttpStatus.OK)
+                         .body(retrieveAll);
+  }
+
+
+  @Override
   @DeleteMapping("/{id}")
   public ResponseEntity deleteById(@PathVariable T2 id) {
     service.deleteById(id);

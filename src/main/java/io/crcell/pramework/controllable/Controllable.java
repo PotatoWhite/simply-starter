@@ -14,5 +14,7 @@ public interface Controllable<T1, T2> {
 
   ResponseEntity get(T2 id);
 
+  ResponseEntity getAll();
+
   ResponseEntity deleteById(T2 id);
 }

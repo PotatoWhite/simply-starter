@@ -3,7 +3,6 @@ package io.crcell.pramework.eventable.consumer;
 import io.crcell.pramework.eventable.EventableEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,23 +20,21 @@ import java.util.Map;
 @Slf4j
 @MappedSuperclass
 public abstract class ConsumerImpl<T, ID> implements Consumer<T, ID> {
+  protected Class<T> type;
   @Value("${spring.application.name}")
   private   String   groupId;
-  protected Class<T> type;
-
   @Autowired
   private KafkaProperties kafkaProperties;
+
+  protected ConsumerImpl(Class<T> type) {
+    this.type = type;
+  }
 
   @Override
   public abstract T handleSave(T entity);
 
   @Override
   public abstract Boolean handleDelete(ID id);
-
-  protected ConsumerImpl(Class<T> type) {
-    this.type = type;
-  }
-
 
   @Bean
   public void messageListenerContainer() {
