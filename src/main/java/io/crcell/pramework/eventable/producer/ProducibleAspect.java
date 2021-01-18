@@ -1,6 +1,7 @@
 package io.crcell.pramework.eventable.producer;
 
 import io.crcell.pramework.eventable.EventableEntity;
+import io.crcell.pramework.eventable.config.KafkaConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -22,6 +23,7 @@ import java.lang.reflect.Type;
 @Component
 public class ProducibleAspect {
 
+  private final KafkaConfig kafkaConfig;
   private final KafkaTemplate kafkaTemplate;
 
   public static Class<?> getEntity(JpaRepository repo) {
@@ -105,6 +107,7 @@ public class ProducibleAspect {
   public void publish(String topic, EventableEntity.Type type, String key, Eventable entity) {
 
     EventableEntity message = new EventableEntity(key, type, entity);
-    kafkaTemplate.send(topic, key, message);
+    // publish to specific partition
+    kafkaTemplate.send(topic, key.hashCode() % kafkaConfig.getNumPartitions() , key , message);
   }
 }

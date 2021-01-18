@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.crcell.eventable</groupId>
   <artifactId>serviceable</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.reflections</groupId>
