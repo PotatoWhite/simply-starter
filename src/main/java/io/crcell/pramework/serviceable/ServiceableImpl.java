@@ -2,6 +2,7 @@ package io.crcell.pramework.serviceable;
 
 import io.crcell.pramework.utils.GsonTools;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityExistsException;
@@ -22,7 +23,7 @@ public abstract class ServiceableImpl<T1, T2> implements Serviceable<T1, T2> {
 
   // create
   @Override
-  public Optional<T1> create(T1 entity) throws EntityExistsException {
+  public Optional<T1> create(T1 entity) throws EntityExistsException, DataIntegrityViolationException {
     return Optional.ofNullable(repository.save(entity));
   }
 

@@ -1,6 +1,7 @@
 package io.crcell.pramework.serviceable;
 
 import io.crcell.pramework.utils.GsonTools;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Optional;
 public interface Serviceable<T1, T2> {
 
   // create
-  Optional<T1> create(T1 entity) throws EntityExistsException;
+  Optional<T1> create(T1 entity) throws EntityExistsException, DataIntegrityViolationException;
 
   // retrieve
   Optional<T1> retrieve(T2 id);

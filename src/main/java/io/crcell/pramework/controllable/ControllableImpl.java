@@ -1,104 +1,70 @@
 package io.crcell.pramework.controllable;
 
 import io.crcell.pramework.serviceable.Serviceable;
-import io.crcell.pramework.utils.GsonTools;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 public abstract class ControllableImpl<T1, T2> implements Controllable<T1, T2> {
-  private final Serviceable service;
+    private final Serviceable service;
 
-  @Override
-  @PostMapping
-  public ResponseEntity create(@Valid @RequestBody T1 createForm) {
-    Optional<T1> save = null;
-    try {
-      save = service.create(createForm);
-      return save.map(created -> ResponseEntity.status(HttpStatus.CREATED)
-                                               .body(created))
-                 .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                       .build());
-    } catch(EntityExistsException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT)
-                           .build();
-    } catch(DataIntegrityViolationException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT)
-                           .build();
+    @Override
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public T1 create(@Valid @RequestBody T1 createForm) throws Throwable {
+        Optional<T1> save = service.create(createForm);
+        return save.orElseThrow(() -> new Exception());
     }
-  }
 
-  @Override
-  @PutMapping("/{id}")
-  public ResponseEntity replaceById(@PathVariable T2 id, @RequestBody @Valid T1 replace) {
-    try {
-      return (ResponseEntity) service.replace(id, replace)
-                                     .map(replaced -> ResponseEntity.status(HttpStatus.OK)
-                                                                    .body(replaced))
-                                     .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                                           .build());
-    } catch(EntityNotFoundException e) {
-      return ResponseEntity.noContent()
-                           .build();
+    @Override
+    @PutMapping("/{id}")
+    public T1 replaceById(@PathVariable T2 id, @RequestBody @Valid T1 replace) throws Throwable {
+        Optional<T1> replaced = service.replace(id, replace);
+        return replaced.orElseThrow(() -> new Exception());
     }
-  }
 
-  @Override
-  @PatchMapping("/{id}")
-  public ResponseEntity updateById(@PathVariable T2 id, @RequestBody Map<String, Object> fields) {
-    try {
-      return (ResponseEntity) service.patch(id, fields)
-                                     .map(user -> ResponseEntity.status(HttpStatus.OK)
-                                                                .body(user))
-                                     .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                                           .build());
-    } catch(EntityNotFoundException e) {
-      return ResponseEntity.noContent()
-                           .build();
-    } catch(GsonTools.JsonObjectExtensionConflictException e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                           .body(e.getMessage());
+    @Override
+    @PatchMapping("/{id}")
+    public T1 updateById(@PathVariable T2 id, @RequestBody Map<String, Object> fields) throws Throwable {
+        Optional<T1> patched = service.patch(id, fields);
+        return patched.orElseThrow(() -> new Exception());
     }
-  }
 
-  @Override
-  @GetMapping("/{id}")
-  public ResponseEntity get(@PathVariable T2 id) {
-    Optional<T1> byId = service.retrieve(id);
-    return byId.map(retrieved -> ResponseEntity.status(HttpStatus.OK)
-                                               .body(retrieved))
-               .orElse(ResponseEntity.status(HttpStatus.NO_CONTENT)
-                                     .build());
-  }
+    @Override
+    @GetMapping("/{id}")
+    public T1 get(@PathVariable T2 id) throws Throwable {
+        Optional<T1> byId = service.retrieve(id);
+        return byId.orElseThrow(() -> new EntityNotFoundException());
+    }
 
-  @Override
-  @GetMapping()
-  public ResponseEntity getAll() {
-    var retrieveAll = service.retrieveAll();
+    @Override
+    @GetMapping()
+    public List<T1> getAll() {
+        var retrieveAll = service.retrieveAll();
 
-    if(retrieveAll.isEmpty())
-      return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                           .build();
+        // fast exit
+        if (retrieveAll.isEmpty())
+            throw new EntityNotFoundException();
 
-    return ResponseEntity.status(HttpStatus.OK)
-                         .body(retrieveAll);
-  }
+        return retrieveAll;
+    }
 
 
-  @Override
-  @DeleteMapping("/{id}")
-  public ResponseEntity deleteById(@PathVariable T2 id) {
-    service.deleteById(id);
-    return ResponseEntity.noContent()
-                         .build();
-  }
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable T2 id) throws Throwable {
+        Optional retrieve = service.retrieve(id);
+        retrieve.map(target -> {
+            service.delete(target);
+            return true;
+        }).orElseThrow(() -> new Exception());
+    }
 }

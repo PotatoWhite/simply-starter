@@ -5,15 +5,19 @@ plugins {
     id 'maven'
     id 'maven-publish'
     id 'java-library'
-
 }
 
-bootJar.enabled(false)
-jar.enabled(true)
-
 group 'io.crcell.eventable'
-version '0.0.3-SNAPSHOT'
+version '0.0.9-SNAPSHOT'
 
+bootJar.enabled(false)
+jar{
+    enabled(true)
+//    into("META-INF/maven/$project.group/$project.name") {
+//        from generatePomFileForMavenJavaPublication
+//        rename ".*", "pom.xml"
+//    }
+}
 
 repositories {
     mavenCentral()
@@ -51,4 +55,23 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+task writePom  {
+    pom {
+        project {
+            groupId this.group.toString()
+            artifactId this.name
+            version version
+
+            inceptionYear '2021'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
 }

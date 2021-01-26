@@ -2,19 +2,20 @@ package io.crcell.pramework.controllable;
 
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface Controllable<T1, T2> {
 
-  ResponseEntity create(T1 createForm);
+  T1 create(T1 createForm) throws Throwable;
 
-  ResponseEntity replaceById(T2 id, T1 replace);
+  T1 replaceById(T2 id, T1 replace) throws Throwable;
 
-  ResponseEntity updateById(T2 id, Map<String, Object> fields);
+  T1 updateById(T2 id, Map<String, Object> fields) throws Throwable;;
 
-  ResponseEntity get(T2 id);
+  T1 get(T2 id) throws Throwable;;
 
-  ResponseEntity getAll();
+  List<T1> getAll() throws Throwable;;
 
-  ResponseEntity deleteById(T2 id);
+  void deleteById(T2 id) throws Throwable;;
 }
