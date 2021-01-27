@@ -22,15 +22,15 @@ Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로�
 > gradle clean build publishToMavenLocal
 ```
 
-## Import
-```groovy
+## 사용방
+```groovy법
+[@build.gradle]
+
 implementation 'io.crcell:simply-starter:0.0.1-SNAPSHOT'
 
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 implementation 'org.springframework.boot:spring-boot-starter-validation'
 ```
-
-
 
 ## Serviceable
 
