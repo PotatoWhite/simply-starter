@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public abstract class ControllableImpl<T1, T2> implements Controllable<T1, T2> {
+public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T2> {
     private final Serviceable service;
 
     @Override

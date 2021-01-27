@@ -1,12 +1,12 @@
 package io.crcell.simply.eventable.producer;
 
 import io.crcell.simply.eventable.EventableEntity;
-import io.crcell.simply.eventable.config.KafkaConfig;
-import lombok.RequiredArgsConstructor;
+import io.crcell.simply.eventable.config.KafkaProducerConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -18,13 +18,17 @@ import java.lang.reflect.Type;
 
 
 @Slf4j
-@RequiredArgsConstructor
 @Aspect
 @Component
 public class ProducibleAspect {
 
-    private final KafkaConfig kafkaConfig;
+    private final KafkaProducerConfig kafkaConfig;
     private final KafkaTemplate kafkaTemplate;
+
+    public ProducibleAspect(KafkaProducerConfig kafkaConfig, @Qualifier("eventableEntityKafkaTemplate") KafkaTemplate kafkaTemplate) {
+        this.kafkaConfig = kafkaConfig;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public static Class<?> getEntity(JpaRepository repo) {
         Type clazzes = getGenericType(repo.getClass())[0];
@@ -67,7 +71,7 @@ public class ProducibleAspect {
         }
     }
 
-    @After(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.save(..))")
+    @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.save(..))")
     private void publishSave(JoinPoint point) throws RuntimeException {
         Object[] args = point.getArgs();
 
@@ -83,7 +87,7 @@ public class ProducibleAspect {
                 .toString(), (Eventable) args[0]);
     }
 
-    @After(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.deleteById(..))")
+    @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.deleteById(..))")
     private void publishDeleteById(JoinPoint point) throws RuntimeException {
         Object[] args = point.getArgs();
         String topic = getEntity((JpaRepository) point.getTarget()).getName();
@@ -93,7 +97,7 @@ public class ProducibleAspect {
         publish(topic, EventableEntity.Type.DELETE, entity.toString(), null);
     }
 
-    @After(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.delete(..))")
+    @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.delete(..))")
     private void publishDelete(JoinPoint point) throws RuntimeException {
         Object[] args = point.getArgs();
         String topic = getEntity((JpaRepository) point.getTarget()).getName();

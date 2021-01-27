@@ -42,7 +42,7 @@ publishing {
 dependencies {
     api group: 'org.reflections', name: 'reflections', version: '0.9.12'
     api 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.springframework.kafka:spring-kafka'
+    api 'org.springframework.kafka:spring-kafka'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

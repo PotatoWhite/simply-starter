@@ -45,13 +45,13 @@ Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로�
 
 ### Serviceable Example
 
-- Serviceable을 사용하기 위해서는 'ServiceableImpl' 을 상속 받는다.
+- Serviceable을 사용하기 위해서는 'AbstractServiceable' 을 상속 받는다.
 - 상속받아 새로 만든 Class를 통해 Entity를 다루는 Repository를 주입한다.
 
 ```java
 
 @Service
-public class UserService extends ServiceableImpl<User, Long> {
+public class UserService extends AbstractServiceable<User, Long> {
     protected UserService(UserRepository repository) {
         super(repository);
     }
@@ -67,7 +67,7 @@ public class UserService extends ServiceableImpl<User, Long> {
 ```java
 
 @Service
-public class UserService extends ServiceableImpl<User, Long> {
+public class UserService extends AbstractServiceable<User, Long> {
     // Repository를 주입 받는다.
     private final UserRepository repository;
 
@@ -86,6 +86,22 @@ public class UserService extends ServiceableImpl<User, Long> {
 ## Controllable
 
 - Serviceable Bean을 기반으로 CRUD 기능을 RestfulAPI 형태로 expose 한다.
+
+### EnableControllable
+
+* Using "@EnableControllable" annotation, activate controllable features.
+
+```java
+
+@EnableControllable
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
 
 ### Controllable Method
 
@@ -110,14 +126,14 @@ public interface Controllable<T1, T2> {
 
 ### Controllable Example
 
-- Controllable 을 사용하기 위해서는 'ControllableImpl' 을 상속 받는다.
+- Controllable 을 사용하기 위해서는 'AbstractControllable' 을 상속 받는다.
 - 상속받아 새로 만든 Class의 생성자를 통해 Servieable Bean을 주입한다.
 
 ```java
 
 @RestController
 @RequestMapping("/users")
-public class UserController extends ControllableImpl<User, Long> {
+public class UserController extends AbstractControllable<User, Long> {
 
     public UserController(UserService service) {
         super(service);
@@ -138,10 +154,141 @@ public class UserController extends ControllableImpl<User, Long> {
 |PATCH|404 No Contents|실패|컨텐츠 미존재|
 |PATCH|400 Bad Request|실패|규격 오류|
 |DELETE|204 No Contents|성공||
-|DELETE|404 Not Found|실||
+|DELETE|404 Not Found|실패|컨텐츠 미존|
 
 ### Controllable의 처리실패 Response Code
 
 |ResponseCode|Reason|Comment|
 |---|---|---|
 |500 Internal Server Error|실패|
+
+# Eventable
+
+* Eventable은 Application 간에 변경된 Entity를 Provisioning 및 Event Driven을 지원한다.
+* Application 간의 통신은 Kafka를 Broker로 사용한다.
+
+## Eventable 의 구성
+
+* Entity의 Entity의 Ownership이 있는 Producer Application은 '@EnableProducible' annotation을 통해 활성화한다.
+* Entity를 사용하는 Consumer Application은 '@EnableProducible' annotation을 사용한다.
+
+## Producer
+
+* Using "@EnableProducible" annotation, activate producer features.
+
+```java
+
+@EnableKafka
+@EnableProducer
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+### Entity의 정의
+
+* 일반적인 JPA Entity형식이지만 Event Driven이 필요한 Entity는 Eventable interface를 적용한다.
+
+```java
+
+@Getter
+@Setter
+@ToString
+@Entity
+public class User implements Eventable<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String name;
+
+    @NotNull
+    @Column(unique = true)
+    private String email;
+}
+```
+
+### ProducibleRepository 정의
+
+* Kafka를 통해 Event를 전달할 Entity가 사용할 Repository를 ProducibleRepository를 사용한다.
+
+```java
+public interface UserRepository extends ProducibleRepository<User, Long> {
+}
+```
+
+## Consumer
+
+* Consumer는 동일한 상의 User를 전달 받기 위해, Producer에서 생성한 User Class를 사용한다. Gradle이나 Maven의 Module을 이용하는 것을 권장한다.
+
+### EnableConsumer
+
+* Using "@EnableConsumer" annotation, activate consumer features.
+
+```java
+
+@EnableKafka
+@EnableConsumer
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+### Entity의 정의
+
+* 일반적인 JPA Entity형식이지만 Event Driven이 필요한 Entity는 Eventable interface를 적용한다.
+
+```java
+
+@Getter
+@Setter
+@ToString
+@Entity
+public class User implements Eventable<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String name;
+
+    @NotNull
+    @Column(unique = true)
+    private String email;
+}
+```
+
+## Listener의 구현
+
+* Producer가 JPA를 이용해 repository에 save하거나 delete할 때마다 event 를 발행하고, Consumer는 AbstractConsumer을
+
+```java
+
+@Slf4j
+@Component
+public class UserListener extends AbstractConsumer<User, Long> {
+    protected UserListener() {
+        super(User.class);
+    }
+
+    @Override
+    public User onSave(User entity) {
+        log.info("SAVE {}", entity.toString());
+        return entity;
+    }
+
+    @Override
+    public Boolean onDelete(Long aLong) {
+        log.info("DELETE {}", aLong);
+        return true;
+    }
+}
+```
+

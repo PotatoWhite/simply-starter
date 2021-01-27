@@ -14,10 +14,10 @@ import java.util.Optional;
 /**
  * P-ramework(PostatoWhite) / 2021-01-06
  */
-public abstract class ServiceableImpl<T1, T2> implements Serviceable<T1, T2> {
+public abstract class AbstractServiceable<T1, T2> implements Serviceable<T1, T2> {
     protected final JpaRepository<T1, T2> repository;
 
-    protected ServiceableImpl(JpaRepository<T1, T2> repository) {
+    protected AbstractServiceable(JpaRepository<T1, T2> repository) {
         this.repository = repository;
     }
 

@@ -19,26 +19,25 @@ import java.util.Map;
 
 @Slf4j
 @MappedSuperclass
-public abstract class ConsumerImpl<T, ID> implements Consumer<T, ID> {
+public abstract class AbstractConsumer<T, ID> implements Consumer<T, ID> {
     protected Class<T> type;
     @Value("${spring.application.name}")
     private String groupId;
     @Autowired
     private KafkaProperties kafkaProperties;
 
-    protected ConsumerImpl(Class<T> type) {
+    protected AbstractConsumer(Class<T> type) {
         this.type = type;
     }
 
     @Override
-    public abstract T handleSave(T entity);
+    public abstract T onSave(T entity);
 
     @Override
-    public abstract Boolean handleDelete(ID id);
+    public abstract Boolean onDelete(ID id);
 
     @Bean
     public void messageListenerContainer() {
-        Map<String, String> properties = kafkaProperties.getProperties();
         ContainerProperties containerProps = new ContainerProperties(type.getName());
         containerProps.setMessageListener(new EventHandler<ID, T>(type, this));
         KafkaMessageListenerContainer<ID, EventableEntity<T, ID>> container = createContainer(containerProps);
@@ -68,6 +67,4 @@ public abstract class ConsumerImpl<T, ID> implements Consumer<T, ID> {
 
         return container;
     }
-
-
 }
