@@ -13,9 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EventableConfig {
 
-    @Value("${simply.eventable.entity-base-package}")
-    private String basePackage;
-
     @Value("${simply.eventable.topic-property.number-of-partitions:1}")
     private Integer numPartitions;
 

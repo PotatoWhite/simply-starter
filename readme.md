@@ -12,6 +12,26 @@ Logic에 더 집중할 수 있게 하는 것이 목적이다.
 기본적으로 Simply은 Spring Framework을 이용한 Restful API를 개발하는 것을 추상화한다. 추상화하는 내역으로는 @Service로 대표되는 Service, @RestConroller로 대표되는
 Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로한 Service에서의 Event Listener를 제공한다.
 
+
+## Build
+
+* 현재 저장소가 없어 Maven Local을 이용한다.
+* 본소스를 gradle을 이용해 Build하고 MavenLocal에 배포한다.
+
+```shell
+> gradle clean build publishToMavenLocal
+```
+
+## Import
+```groovy
+implementation 'io.crcell:simply-starter:0.0.1-SNAPSHOT'
+
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+implementation 'org.springframework.boot:spring-boot-starter-validation'
+```
+
+
+
 ## Serviceable
 
 - 특정 Entity의 관리를 목적으로하는 CRUD 기능을 자동화한다.
