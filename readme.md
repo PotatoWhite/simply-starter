@@ -22,14 +22,29 @@ Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로�
 > gradle clean build publishToMavenLocal
 ```
 
-## 사용방
-```groovy법
+## 사용방법
+```groovy
 [@build.gradle]
 
 implementation 'io.crcell:simply-starter:0.0.1-SNAPSHOT'
 
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 implementation 'org.springframework.boot:spring-boot-starter-validation'
+```
+
+## 설정
+* eventable에 한하여 별도의 설정이 필요하다.
+* entity-base-package는 Producer가 Kafka의 Topic을 생성하기 위해 Bean의 Scan 지점을 설정한다.
+* number-of-replicas는 Topic의 Replicas 갯수이다.
+* number-of-partitions는 Topic의 Partitions 갯수이다.
+
+```yaml
+simply:
+  eventable:
+    entity-base-package: io.crcell.demo.entities
+    topic-property:
+      number-of-replicas: 1
+      number-of-partitions: 10
 ```
 
 ## Serviceable
@@ -148,10 +163,12 @@ public interface Controllable<T1, T2> {
 
 - Controllable 을 사용하기 위해서는 'AbstractControllable' 을 상속 받는다.
 - 상속받아 새로 만든 Class의 생성자를 통해 Servieable Bean을 주입한다.
+- @GeneralControllableResponse 은 Controller Advice를 활성화한다. Advice에서 에러처리는 하기 Response Code를 참조한다.
 
 ```java
 
 @RestController
+@GeneralControllableResponse
 @RequestMapping("/users")
 public class UserController extends AbstractControllable<User, Long> {
 
@@ -190,7 +207,7 @@ public class UserController extends AbstractControllable<User, Long> {
 ## Eventable 의 구성
 
 * Entity의 Entity의 Ownership이 있는 Producer Application은 '@EnableProducible' annotation을 통해 활성화한다.
-* Entity를 사용하는 Consumer Application은 '@EnableProducible' annotation을 사용한다.
+* Entity를 사용하는 Consumer Application은 '@Enableroducible' annotation을 사용한다.
 
 ## Producer
 
@@ -245,22 +262,6 @@ public interface UserRepository extends ProducibleRepository<User, Long> {
 
 * Consumer는 동일한 상의 User를 전달 받기 위해, Producer에서 생성한 User Class를 사용한다. Gradle이나 Maven의 Module을 이용하는 것을 권장한다.
 
-### EnableConsumer
-
-* Using "@EnableConsumer" annotation, activate consumer features.
-
-```java
-
-@EnableKafka
-@EnableConsumer
-@SpringBootApplication
-public class Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
-```
 
 ### Entity의 정의
 

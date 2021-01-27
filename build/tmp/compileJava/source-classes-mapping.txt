@@ -3,8 +3,6 @@ io/crcell/simply/eventable/consumer/EventHandler.java
  io.crcell.simply.eventable.consumer.EventHandler$1
 io/crcell/simply/eventable/producer/Eventable.java
  io.crcell.simply.eventable.producer.Eventable
-io/crcell/simply/eventable/config/EventableConfig.java
- io.crcell.simply.eventable.config.EventableConfig
 io/crcell/simply/eventable/producer/ProducibleAspect.java
  io.crcell.simply.eventable.producer.ProducibleAspect
 io/crcell/simply/controllable/AbstractControllable.java
@@ -14,8 +12,6 @@ io/crcell/simply/eventable/EventableEntity.java
  io.crcell.simply.eventable.EventableEntity$Type
 io/crcell/simply/controllable/ErrorResponse.java
  io.crcell.simply.controllable.ErrorResponse
-io/crcell/simply/eventable/consumer/EnableConsumer.java
- io.crcell.simply.eventable.consumer.EnableConsumer
 io/crcell/simply/eventable/consumer/Consumer.java
  io.crcell.simply.eventable.consumer.Consumer
 io/crcell/simply/utils/GsonTools.java
