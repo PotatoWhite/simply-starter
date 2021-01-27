@@ -7,16 +7,17 @@ plugins {
     id 'java-library'
 }
 
-group 'io.crcell.eventable'
-version '0.0.9-SNAPSHOT'
+group 'io.crcell'
+version '0.0.1-SNAPSHOT'
 
 bootJar.enabled(false)
-jar{
+jar {
     enabled(true)
-//    into("META-INF/maven/$project.group/$project.name") {
-//        from generatePomFileForMavenJavaPublication
-//        rename ".*", "pom.xml"
-//    }
+    into("META-INF/maven/$project.group}/$project.name") {
+        println "$project.group:$project.name:${this.version}"
+        from { generatePomFileForMavenJavaPublication }
+        rename ".*", "pom.xml"
+    }
 }
 
 repositories {
@@ -39,8 +40,8 @@ publishing {
 
 
 dependencies {
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.12'
-    implementation('com.google.code.gson:gson:2.8.6')
+    api group: 'org.reflections', name: 'reflections', version: '0.9.12'
+    api 'com.google.code.gson:gson:2.8.6'
     implementation 'org.springframework.kafka:spring-kafka'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -55,23 +56,4 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-task writePom  {
-    pom {
-        project {
-            groupId this.group.toString()
-            artifactId this.name
-            version version
-
-            inceptionYear '2021'
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-        }
-    }.writeTo("pom.xml")
 }
