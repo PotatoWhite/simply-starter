@@ -26,7 +26,7 @@ Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로�
 ```groovy
 [@ build.gradle]
 
-implementation 'io.crcell:simply-starter:0.0.1-SNAPSHOT'
+implementation 'io.crcell:simply-starter:0.0.2-SNAPSHOT'
 
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 implementation 'org.springframework.boot:spring-boot-starter-validation'
