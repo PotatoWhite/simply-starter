@@ -1,4 +1,4 @@
-# Simply - Serviceable, Controllable, Eventible
+# Simply - Serviceable, Controllable, Eventable
 
 Simply은 Spring 기반의 Restful API, Event-Driven 개발시 중복적인 코드를 줄여 준다. 중복적인 코드를 줄임으로써 Application 개발자가 Project의 목적인 Business
 Logic에 더 집중할 수 있게 하는 것이 목적이다.
