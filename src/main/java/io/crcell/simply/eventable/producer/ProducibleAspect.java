@@ -23,15 +23,15 @@ import java.lang.reflect.Type;
 public class ProducibleAspect {
 
     private final KafkaProducerConfig kafkaConfig;
-    private final KafkaTemplate kafkaTemplate;
+    private final KafkaTemplate       kafkaTemplate;
 
     public ProducibleAspect(KafkaProducerConfig kafkaConfig, @Qualifier("eventableEntityKafkaTemplate") KafkaTemplate kafkaTemplate) {
-        this.kafkaConfig = kafkaConfig;
+        this.kafkaConfig   = kafkaConfig;
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public static Class<?> getEntity(JpaRepository repo) {
-        Type clazzes = getGenericType(repo.getClass())[0];
+        Type   clazzes  = getGenericType(repo.getClass())[0];
         Type[] jpaClass = getGenericType(getClass(clazzes));
         return getClass(((ParameterizedType) jpaClass[0]).getActualTypeArguments()[0]);
     }
@@ -58,11 +58,11 @@ public class ProducibleAspect {
         } else if (type instanceof ParameterizedType) {
             return getClass(((ParameterizedType) type).getRawType());
         } else if (type instanceof GenericArrayType) {
-            Type componentType = ((GenericArrayType) type).getGenericComponentType();
+            Type     componentType  = ((GenericArrayType) type).getGenericComponentType();
             Class<?> componentClass = getClass(componentType);
             if (componentClass != null) {
                 return Array.newInstance(componentClass, 0)
-                        .getClass();
+                            .getClass();
             } else {
                 return null;
             }
@@ -80,17 +80,17 @@ public class ProducibleAspect {
             return;
         }
 
-        String topic = getEntity((JpaRepository) point.getTarget()).getName();
+        String    topic  = getEntity((JpaRepository) point.getTarget()).getName();
         Eventable entity = (Eventable) args[0];
 
         publish(topic, EventableEntity.Type.SAVE, entity.getId()
-                .toString(), (Eventable) args[0]);
+                                                        .toString(), (Eventable) args[0]);
     }
 
     @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.deleteById(..))")
     private void publishDeleteById(JoinPoint point) throws RuntimeException {
-        Object[] args = point.getArgs();
-        String topic = getEntity((JpaRepository) point.getTarget()).getName();
+        Object[] args  = point.getArgs();
+        String   topic = getEntity((JpaRepository) point.getTarget()).getName();
 
         var entity = (Long) args[0];
 
@@ -99,13 +99,13 @@ public class ProducibleAspect {
 
     @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.delete(..))")
     private void publishDelete(JoinPoint point) throws RuntimeException {
-        Object[] args = point.getArgs();
-        String topic = getEntity((JpaRepository) point.getTarget()).getName();
+        Object[] args  = point.getArgs();
+        String   topic = getEntity((JpaRepository) point.getTarget()).getName();
 
         var entity = (Eventable) args[0];
 
         publish(topic, EventableEntity.Type.DELETE, entity.getId()
-                .toString(), null);
+                                                          .toString(), null);
     }
 
     public void publish(String topic, EventableEntity.Type type, String key, Eventable entity) {

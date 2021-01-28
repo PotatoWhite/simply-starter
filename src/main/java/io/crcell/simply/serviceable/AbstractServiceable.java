@@ -37,7 +37,7 @@ public abstract class AbstractServiceable<T1, T2> implements Serviceable<T1, T2>
     @Override
     public Optional<T1> patch(T2 id, Map<String, Object> fields) throws GsonTools.JsonObjectExtensionConflictException {
         Optional<T1> byId = repository.findById(id);
-        var user = byId.orElseThrow(() -> new EntityNotFoundException("entity not found id=" + id));
+        var          user = byId.orElseThrow(() -> new EntityNotFoundException("entity not found id=" + id));
 
         return Optional.ofNullable(repository.save(GsonTools.merge(user, fields)));
     }
@@ -59,10 +59,10 @@ public abstract class AbstractServiceable<T1, T2> implements Serviceable<T1, T2>
     @Override
     public Optional<T1> replace(T2 id, T1 replace) {
         return (Optional<T1>) repository.findById(id)
-                .map(retrieved -> {
-                    BeanUtils.copyProperties(replace, retrieved, "id");
-                    return Optional.ofNullable(repository.save(retrieved));
-                });
+                                        .map(retrieved -> {
+                                            BeanUtils.copyProperties(replace, retrieved, "id");
+                                            return Optional.ofNullable(repository.save(retrieved));
+                                        });
     }
 
 

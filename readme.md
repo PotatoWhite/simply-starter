@@ -1,17 +1,16 @@
-# Simply - Servicable, Controllable, Eventable
+# Simply - Serviceable, Controllable, Eventible
 
 Simply은 Spring 기반의 Restful API, Event-Driven 개발시 중복적인 코드를 줄여 준다. 중복적인 코드를 줄임으로써 Application 개발자가 Project의 목적인 Business
 Logic에 더 집중할 수 있게 하는 것이 목적이다.
 
 ## Features
 
-- Servicable : Jpa 기반 Entity의 기본적인 CRUD를 생성한다.
-- Controllable : Servicable 기반의 Restful API를 생성한다.
+- Serviceable : Jpa 기반 Entity의 기본적인 CRUD를 생성한다.
+- Controllable : Serviceable 기반의 Restful API를 생성한다.
 - Eventable : Kafka를 통해 Entity의 변경시 다른 서비스로 변경을 알린다.
 
 기본적으로 Simply은 Spring Framework을 이용한 Restful API를 개발하는 것을 추상화한다. 추상화하는 내역으로는 @Service로 대표되는 Service, @RestConroller로 대표되는
 Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로한 Service에서의 Event Listener를 제공한다.
-
 
 ## Build
 
@@ -23,8 +22,9 @@ Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로�
 ```
 
 ## 사용방법
+
 ```groovy
-[@build.gradle]
+[@ build.gradle]
 
 implementation 'io.crcell:simply-starter:0.0.1-SNAPSHOT'
 
@@ -33,6 +33,7 @@ implementation 'org.springframework.boot:spring-boot-starter-validation'
 ```
 
 ## 설정
+
 * eventable에 한하여 별도의 설정이 필요하다.
 * entity-base-package는 Producer가 Kafka의 Topic을 생성하기 위해 Bean의 Scan 지점을 설정한다.
 * number-of-replicas는 Topic의 Replicas 갯수이다.
@@ -261,7 +262,6 @@ public interface UserRepository extends ProducibleRepository<User, Long> {
 ## Consumer
 
 * Consumer는 동일한 상의 User를 전달 받기 위해, Producer에서 생성한 User Class를 사용한다. Gradle이나 Maven의 Module을 이용하는 것을 권장한다.
-
 
 ### Entity의 정의
 

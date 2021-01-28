@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventableEntity<T, ID> {
-    private ID key;
+    private ID   key;
     private Type eventType;
-    private T payload;
+    private T    payload;
 
     public enum Type {
         SAVE, DELETE

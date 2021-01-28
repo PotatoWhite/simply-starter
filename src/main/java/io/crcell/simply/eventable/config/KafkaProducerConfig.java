@@ -32,11 +32,11 @@ import java.util.Set;
 @Configuration
 public class KafkaProducerConfig {
 
-    private final BeanFactory beanFactory;
-    private final KafkaProperties kafkaProperties;
-    private Map<Class, String> topics = new HashMap<>();
+    private final BeanFactory        beanFactory;
+    private final KafkaProperties    kafkaProperties;
+    private       Map<Class, String> topics = new HashMap<>();
     @Value("${simply.eventable.entity-base-package}")
-    private String basePackage;
+    private       String             basePackage;
 
     @Value("${simply.eventable.topic-property.number-of-partitions:1}")
     private Integer numPartitions;
@@ -50,18 +50,18 @@ public class KafkaProducerConfig {
     }
 
     private void createTopics() {
-        Reflections reflections = new Reflections(basePackage);
-        Set<Class<? extends Eventable>> subTypesOf = reflections.getSubTypesOf(Eventable.class);
+        Reflections                     reflections = new Reflections(basePackage);
+        Set<Class<? extends Eventable>> subTypesOf  = reflections.getSubTypesOf(Eventable.class);
 
         ConfigurableBeanFactory factory = (ConfigurableBeanFactory) beanFactory;
 
         subTypesOf.stream()
-                .forEach(item -> {
-                    this.topics.put(item, item.getName());
-                    NewTopic newTopic = new NewTopic(item.getName(), numPartitions, numReplicas);
-                    factory.registerSingleton(item.getName() + "topic", newTopic);
-                    log.info("Topic created {} : {} : {}", item.getName(), numPartitions, numReplicas);
-                });
+                  .forEach(item -> {
+                      this.topics.put(item, item.getName());
+                      NewTopic newTopic = new NewTopic(item.getName(), numPartitions, numReplicas);
+                      factory.registerSingleton(item.getName() + "topic", newTopic);
+                      log.info("Topic created {} : {} : {}", item.getName(), numPartitions, numReplicas);
+                  });
     }
 
 

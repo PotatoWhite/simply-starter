@@ -15,7 +15,9 @@ import java.util.Optional;
 public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T2> {
     private final Serviceable service;
 
+
     @Override
+    @SimplyLogging
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public T1 create(@Valid @RequestBody T1 createForm) throws Throwable {
@@ -24,6 +26,7 @@ public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T
     }
 
     @Override
+    @SimplyLogging
     @PutMapping("/{id}")
     public T1 replaceById(@PathVariable T2 id, @RequestBody @Valid T1 replace) throws Throwable {
         Optional<T1> replaced = service.replace(id, replace);
@@ -31,6 +34,7 @@ public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T
     }
 
     @Override
+    @SimplyLogging
     @PatchMapping("/{id}")
     public T1 updateById(@PathVariable T2 id, @RequestBody Map<String, Object> fields) throws Throwable {
         Optional<T1> patched = service.patch(id, fields);
@@ -58,11 +62,12 @@ public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T
 
 
     @Override
+    @SimplyLogging
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable T2 id) {
-        Optional<T1> byId = service.retrieve(id);
-        T1 target = byId.orElseThrow(() -> new EntityNotFoundException("Entity(" + id + ") does not exist."));
+        Optional<T1> byId   = service.retrieve(id);
+        T1           target = byId.orElseThrow(() -> new EntityNotFoundException("Entity(" + id + ") does not exist."));
         service.deleteById(target);
     }
 }

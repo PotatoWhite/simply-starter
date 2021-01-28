@@ -20,11 +20,11 @@ import java.util.Map;
 @Slf4j
 @MappedSuperclass
 public abstract class AbstractConsumer<T, ID> implements Consumer<T, ID> {
-    protected Class<T> type;
+    protected Class<T>        type;
     @Value("${spring.application.name}")
-    private String groupId;
+    private   String          groupId;
     @Autowired
-    private KafkaProperties kafkaProperties;
+    private   KafkaProperties kafkaProperties;
 
     protected AbstractConsumer(Class<T> type) {
         this.type = type;
@@ -61,8 +61,8 @@ public abstract class AbstractConsumer<T, ID> implements Consumer<T, ID> {
 
 
     private KafkaMessageListenerContainer<ID, EventableEntity<T, ID>> createContainer(ContainerProperties containerProps) {
-        Map<String, Object> props = consumerProps();
-        DefaultKafkaConsumerFactory<ID, EventableEntity<T, ID>> cf = new DefaultKafkaConsumerFactory<>(props);
+        Map<String, Object>                                       props     = consumerProps();
+        DefaultKafkaConsumerFactory<ID, EventableEntity<T, ID>>   cf        = new DefaultKafkaConsumerFactory<>(props);
         KafkaMessageListenerContainer<ID, EventableEntity<T, ID>> container = new KafkaMessageListenerContainer<>(cf, containerProps);
 
         return container;

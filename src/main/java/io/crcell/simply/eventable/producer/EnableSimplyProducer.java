@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 @Documented
 @Import({ProducibleAspect.class, KafkaProducerConfig.class})
 @Configuration
-public @interface EnableProducer {
+public @interface EnableSimplyProducer {
 }

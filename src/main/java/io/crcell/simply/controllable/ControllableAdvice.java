@@ -8,19 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice(annotations = GeneralControllableResponse.class)
 public class ControllableAdvice {
-
-    private ResponseEntity<ErrorResponse> responseError(String message, HttpStatus conflict) {
-        log.error("{}", message);
-        return ResponseEntity.status(conflict).body(new ErrorResponse(message));
-    }
 
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<ErrorResponse> handleConflict(EntityExistsException e) {
@@ -55,4 +53,10 @@ public class ControllableAdvice {
     }
 
 
+    private ResponseEntity<ErrorResponse> responseError(String message, HttpStatus status) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        log.info("[ERR] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), status, message);
+
+        return ResponseEntity.status(status).body(new ErrorResponse(message));
+    }
 }
