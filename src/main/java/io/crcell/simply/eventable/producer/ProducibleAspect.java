@@ -71,30 +71,23 @@ public class ProducibleAspect {
         }
     }
 
-    @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.save(..))")
-    private void publishSave(JoinPoint point) throws RuntimeException {
-        Object[] args = point.getArgs();
-
-        if (args == null) {
-            log.error("Empty entity");
+    @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.save(..))", returning = "entity")
+    private void publishSave(Eventable entity) throws RuntimeException {
+        if (entity == null) {
+            log.error("Entity could not be published (entity is null)");
             return;
         }
 
-        String    topic  = getEntity((JpaRepository) point.getTarget()).getName();
-        Eventable entity = (Eventable) args[0];
-
-        publish(topic, EventableEntity.Type.SAVE, entity.getId()
-                                                        .toString(), (Eventable) args[0]);
+        publish(entity.getClass().getName(), EventableEntity.Type.SAVE, entity.getId().toString(), entity);
     }
 
     @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.deleteById(..))")
     private void publishDeleteById(JoinPoint point) throws RuntimeException {
         Object[] args  = point.getArgs();
         String   topic = getEntity((JpaRepository) point.getTarget()).getName();
+        var      id    = args[0];
 
-        var entity = (Long) args[0];
-
-        publish(topic, EventableEntity.Type.DELETE, entity.toString(), null);
+        publish(topic, EventableEntity.Type.DELETE, id.toString(), null);
     }
 
     @AfterReturning(value = "execution(* io.crcell.simply.eventable.producer.repository.ProducibleRepository.delete(..))")

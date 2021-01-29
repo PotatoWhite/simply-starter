@@ -43,7 +43,7 @@ public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T
 
     @Override
     @GetMapping("/{id}")
-    public T1 get(@PathVariable T2 id) throws Throwable {
+    public T1 get(@PathVariable T2 id) {
         Optional<T1> byId = service.retrieve(id);
         return byId.orElseThrow(() -> new EntityNotFoundException());
     }
@@ -65,9 +65,8 @@ public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T
     @SimplyLogging
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable T2 id) {
-        Optional<T1> byId   = service.retrieve(id);
-        T1           target = byId.orElseThrow(() -> new EntityNotFoundException("Entity(" + id + ") does not exist."));
-        service.deleteById(target);
+    public void deleteById(@PathVariable T2 id) throws Throwable {
+        service.retrieve(id).orElseThrow(() -> new EntityNotFoundException("Entity(" + id + ") does not exist."));
+        service.deleteById(id);
     }
 }
