@@ -44,11 +44,14 @@ public class SimplyLoggingAspect {
         log.info("[REQ] {} {} Param:{} RequestBody:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody);
     }
 
-    @AfterReturning(value = "@annotation(io.crcell.simply.controllable.SimplyLogging)")
-    private void loggingResponse() {
-        HttpServletRequest  request  = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-        log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), response.toString());
+    @AfterReturning(value = "@annotation(io.crcell.simply.controllable.SimplyLogging)", returning = "ret")
+    private void loggingResponse(Object ret) {
+        try {
+            HttpServletRequest  request  = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+            log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), ret.toString());
+        } catch (Exception e) {
+        }
     }
 
     @AfterThrowing(value = "@annotation(io.crcell.simply.controllable.SimplyLogging)", throwing = "exception")
@@ -59,8 +62,6 @@ public class SimplyLoggingAspect {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             log.debug("[ERR] {} {} Param:{}, trace:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), writer.toString());
         } catch (Exception e) {
-
         }
-
     }
 }

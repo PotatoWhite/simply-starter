@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @MappedSuperclass
-public abstract class AbstractConsumer<T, ID> implements Consumer<T, ID> {
+public abstract class AbstractConsumer<T, ID> implements Consumer<T> {
     protected Class<T>        type;
     @Value("${spring.application.name}")
     private   String          groupId;
@@ -34,7 +34,7 @@ public abstract class AbstractConsumer<T, ID> implements Consumer<T, ID> {
     public abstract T onSave(T entity);
 
     @Override
-    public abstract Boolean onDelete(ID id);
+    public abstract Boolean onDelete(String id);
 
     @Bean
     public void messageListenerContainer() {

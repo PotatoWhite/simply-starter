@@ -97,8 +97,7 @@ public class ProducibleAspect {
 
         var entity = (Eventable) args[0];
 
-        publish(topic, EventableEntity.Type.DELETE, entity.getId()
-                                                          .toString(), null);
+        publish(topic, EventableEntity.Type.DELETE, entity.getId().toString(), null);
     }
 
     public void publish(String topic, EventableEntity.Type type, String key, Eventable entity) {

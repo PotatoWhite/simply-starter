@@ -1,8 +1,8 @@
 package io.crcell.simply.eventable.consumer;
 
-public interface Consumer<T, ID> {
+public interface Consumer<T> {
     T onSave(T entity);
 
-    Boolean onDelete(ID id);
+    Boolean onDelete(String id);
 
 }

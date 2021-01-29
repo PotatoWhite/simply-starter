@@ -7,11 +7,11 @@ import org.springframework.kafka.listener.MessageListener;
 
 public class EventHandler<ID, T> implements MessageListener<ID, EventableEntity<T, ID>> {
 
-    private final Class<T>        type;
-    private final Consumer<T, ID> consumer;
+    private final Class<T>    type;
+    private final Consumer<T> consumer;
     ObjectMapper mapper = new ObjectMapper();
 
-    public EventHandler(Class<T> type, Consumer<T, ID> consumer) {
+    public EventHandler(Class<T> type, Consumer<T> consumer) {
         this.type     = type;
         this.consumer = consumer;
     }
@@ -28,8 +28,7 @@ public class EventHandler<ID, T> implements MessageListener<ID, EventableEntity<
                 consumer.onSave(entity);
                 break;
             case DELETE:
-                consumer.onDelete(message.value()
-                                         .getKey());
+                consumer.onDelete(message.value().getKey());
                 break;
         }
     }
