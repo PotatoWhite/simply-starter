@@ -31,10 +31,10 @@ public abstract class AbstractConsumer<T, ID> implements Consumer<T> {
     }
 
     @Override
-    public abstract T onSave(T entity);
+    public abstract T onSave(String key, T entity);
 
     @Override
-    public abstract Boolean onDelete(String id);
+    public abstract Boolean onDelete(String key);
 
     @Bean
     public void messageListenerContainer() {

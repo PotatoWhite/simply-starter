@@ -25,7 +25,7 @@ public class EventHandler<ID, T> implements MessageListener<ID, EventableEntity<
             case SAVE:
                 T entity = mapper.convertValue(message.value()
                                                       .getPayload(), type);
-                consumer.onSave(entity);
+                consumer.onSave(message.value().getKey(), entity);
                 break;
             case DELETE:
                 consumer.onDelete(message.value().getKey());
