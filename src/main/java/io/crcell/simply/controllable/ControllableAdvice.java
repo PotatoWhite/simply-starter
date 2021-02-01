@@ -27,7 +27,7 @@ public class ControllableAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoContents(EntityNotFoundException e) {
-        return responseError(e.getMessage(), HttpStatus.NOT_FOUND);
+        return responseError(e.getMessage(), HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

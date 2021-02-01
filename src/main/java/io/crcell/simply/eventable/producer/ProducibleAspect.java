@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
@@ -100,6 +101,7 @@ public class ProducibleAspect {
         publish(topic, EventableEntity.Type.DELETE, entity.getId().toString(), null);
     }
 
+    @Async
     public void publish(String topic, EventableEntity.Type type, String key, Eventable entity) {
 
         EventableEntity message = new EventableEntity(key, type, entity);
