@@ -1,6 +1,7 @@
 package io.crcell.simply.controllable;
 
-import io.crcell.simply.serviceable.Serviceable;
+import io.crcell.simply.SimplySpec;
+import io.crcell.simply.serviceable.AbstractServiceable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,55 +10,52 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
-public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T2> {
-    private final Serviceable service;
+public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
+    private final AbstractServiceable<T, ID> service;
 
 
     @Override
     @SimplyLogging
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public T1 create(@Valid @RequestBody T1 createForm) throws Throwable {
-        Optional<T1> save = service.create(createForm);
-        return save.orElseThrow(() -> new Exception());
+    public T create(@Valid @RequestBody T createForm) throws Throwable {
+        return service.create(createForm);
     }
 
     @Override
     @SimplyLogging
     @PutMapping("/{id}")
-    public T1 replaceById(@PathVariable T2 id, @RequestBody @Valid T1 replace) throws Throwable {
-        Optional<T1> replaced = service.replace(id, replace);
-        return replaced.orElseThrow(() -> new Exception());
+    public T replaceById(@PathVariable ID id, @RequestBody @Valid T replace) throws Throwable {
+        checkEntityExistenceAndThrow(id);
+        return service.replaceById(id, replace);
     }
 
     @Override
     @SimplyLogging
     @PatchMapping("/{id}")
-    public T1 updateById(@PathVariable T2 id, @RequestBody Map<String, Object> fields) throws Throwable {
-        Optional<T1> patched = service.patch(id, fields);
-        return patched.orElseThrow(() -> new Exception());
+    public T updateById(@PathVariable ID id, @RequestBody Map<String, Object> fields) throws Throwable {
+        checkEntityExistenceAndThrow(id);
+        return service.updateById(id, fields);
     }
+
 
     @Override
     @GetMapping("/{id}")
-    public T1 get(@PathVariable T2 id) {
-        Optional<T1> byId = service.retrieve(id);
-        return byId.orElseThrow(() -> new EntityNotFoundException());
+    public T get(@PathVariable ID id) throws Throwable {
+        return service.get(id);
     }
+
 
     @Override
     @GetMapping()
-    public List<T1> getAll() {
-        var retrieveAll = service.retrieveAll();
-
-        // fast exit
-        if (retrieveAll.isEmpty())
+    public List<T> getAll() {
+        List<T> all = service.getAll();
+        if (all.isEmpty())
             throw new EntityNotFoundException();
-
-        return retrieveAll;
+        return all;
     }
 
 
@@ -65,8 +63,22 @@ public abstract class AbstractControllable<T1, T2> implements Controllable<T1, T
     @SimplyLogging
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable T2 id) throws Throwable {
-        service.retrieve(id).orElseThrow(() -> new EntityNotFoundException("Entity(" + id + ") does not exist."));
+    public void deleteById(@PathVariable ID id) throws Throwable {
+        checkEntityExistenceAndThrow(id);
         service.deleteById(id);
+    }
+
+    @Override
+    public void delete(T entity) throws Throwable {
+        // not use in controller
+    }
+
+    private void checkEntityExistenceAndThrow(@PathVariable ID id) throws NoSuchElementException {
+        try {
+            service.get(id);
+        } catch (EntityNotFoundException e) {
+            // for 404
+            throw new NoSuchElementException(e.getMessage());
+        }
     }
 }

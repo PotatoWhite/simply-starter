@@ -16,14 +16,14 @@ io/crcell/simply/eventable/consumer/Consumer.java
  io.crcell.simply.eventable.consumer.Consumer
 io/crcell/simply/eventable/producer/EnableSimplyProducer.java
  io.crcell.simply.eventable.producer.EnableSimplyProducer
+io/crcell/simply/controllable/GeneralControllableResponse.java
+ io.crcell.simply.controllable.GeneralControllableResponse
 io/crcell/simply/utils/GsonTools.java
  io.crcell.simply.utils.GsonTools
  io.crcell.simply.utils.GsonTools$1
  io.crcell.simply.utils.GsonTools$ArrayStrategy
  io.crcell.simply.utils.GsonTools$ConflictStrategy
  io.crcell.simply.utils.GsonTools$JsonObjectExtensionConflictException
-io/crcell/simply/controllable/GeneralControllableResponse.java
- io.crcell.simply.controllable.GeneralControllableResponse
 io/crcell/simply/controllable/SimplyLogging.java
  io.crcell.simply.controllable.SimplyLogging
 io/crcell/simply/utils/JsonConverter.java
@@ -32,17 +32,17 @@ io/crcell/simply/eventable/consumer/AbstractConsumer.java
  io.crcell.simply.eventable.consumer.AbstractConsumer
 io/crcell/simply/controllable/ControllableAdvice.java
  io.crcell.simply.controllable.ControllableAdvice
-io/crcell/simply/serviceable/Serviceable.java
- io.crcell.simply.serviceable.Serviceable
+io/crcell/simply/clientable/AbstractClientable.java
+ io.crcell.simply.clientable.AbstractClientable
 io/crcell/simply/eventable/producer/repository/ProducibleRepository.java
  io.crcell.simply.eventable.producer.repository.ProducibleRepository
 io/crcell/simply/controllable/EnableSimplyControllable.java
  io.crcell.simply.controllable.EnableSimplyControllable
 io/crcell/simply/controllable/SimplyLoggingAspect.java
  io.crcell.simply.controllable.SimplyLoggingAspect
+io/crcell/simply/SimplySpec.java
+ io.crcell.simply.SimplySpec
 io/crcell/simply/serviceable/AbstractServiceable.java
  io.crcell.simply.serviceable.AbstractServiceable
 io/crcell/simply/eventable/config/KafkaProducerConfig.java
  io.crcell.simply.eventable.config.KafkaProducerConfig
-io/crcell/simply/controllable/Controllable.java
- io.crcell.simply.controllable.Controllable

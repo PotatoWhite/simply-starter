@@ -1,5 +1,6 @@
 package io.crcell.simply.serviceable;
 
+import io.crcell.simply.SimplySpec;
 import io.crcell.simply.utils.GsonTools;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,65 +10,59 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * P-ramework(PostatoWhite) / 2021-01-06
  */
-public abstract class AbstractServiceable<T1, T2> implements Serviceable<T1, T2> {
-    protected final JpaRepository<T1, T2> repository;
+public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
+    protected final JpaRepository<T, ID> repository;
 
-    protected AbstractServiceable(JpaRepository<T1, T2> repository) {
+    protected AbstractServiceable(JpaRepository<T, ID> repository) {
         this.repository = repository;
     }
 
+
     // create
     @Override
-    public Optional<T1> create(T1 entity) throws EntityExistsException, DataIntegrityViolationException {
-        return Optional.ofNullable(repository.save(entity));
+    public T create(T entity) throws EntityExistsException, DataIntegrityViolationException {
+        return repository.save(entity);
     }
 
     // retrieve
     @Override
-    public Optional<T1> retrieve(T2 id) {
-        return repository.findById(id);
+    public T get(ID id) throws EntityNotFoundException {
+        return repository.findById(id)
+                         .orElseThrow(() -> new EntityNotFoundException("entity not found id=" + id));
     }
 
     // update
     @Override
-    public Optional<T1> patch(T2 id, Map<String, Object> fields) throws GsonTools.JsonObjectExtensionConflictException {
-        Optional<T1> byId = repository.findById(id);
-        var          user = byId.orElseThrow(() -> new EntityNotFoundException("entity not found id=" + id));
-
-        return Optional.ofNullable(repository.save(GsonTools.merge(user, fields)));
+    public T updateById(ID id, Map<String, Object> fields) throws Throwable {
+        return repository.save(GsonTools.merge(get(id), fields));
     }
 
     // delete
     @Override
-    public void deleteById(T2 id) {
+    public void deleteById(ID id) {
         repository.deleteById(id);
     }
 
     // delete
     @Override
-    public void delete(T1 entity) {
+    public void delete(T entity) {
         repository.delete(entity);
     }
 
-
     // replace
     @Override
-    public Optional<T1> replace(T2 id, T1 replace) {
-        return (Optional<T1>) repository.findById(id)
-                                        .map(retrieved -> {
-                                            BeanUtils.copyProperties(replace, retrieved, "id");
-                                            return Optional.ofNullable(repository.save(retrieved));
-                                        });
+    public T replaceById(ID id, T replace) throws EntityNotFoundException {
+        T retrieved = get(id);
+        BeanUtils.copyProperties(replace, retrieved, "id");
+        return repository.save(retrieved);
     }
 
-
     @Override
-    public List<T1> retrieveAll() {
+    public List<T> getAll() {
         return repository.findAll();
     }
 }
