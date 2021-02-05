@@ -19,14 +19,14 @@ import java.util.Map;
 
 @Slf4j
 @MappedSuperclass
-public abstract class AbstractConsumer<T, ID> implements Consumer<T> {
+public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T> {
     protected Class<T>        type;
     @Value("${spring.application.name}")
     private   String          groupId;
     @Autowired
     private   KafkaProperties kafkaProperties;
 
-    protected AbstractConsumer(Class<T> type) {
+    protected AbstractSimplyConsumer(Class<T> type) {
         this.type = type;
     }
 

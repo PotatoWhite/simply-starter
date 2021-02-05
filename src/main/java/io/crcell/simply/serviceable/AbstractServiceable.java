@@ -10,6 +10,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * P-ramework(PostatoWhite) / 2021-01-06
@@ -30,9 +31,9 @@ public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
 
     // retrieve
     @Override
-    public T get(ID id) throws EntityNotFoundException {
+    public T get(ID id) throws NoSuchElementException {
         return repository.findById(id)
-                         .orElseThrow(() -> new EntityNotFoundException("entity not found id=" + id));
+                         .orElseThrow(() -> new NoSuchElementException("entityid=" + id));
     }
 
     // update

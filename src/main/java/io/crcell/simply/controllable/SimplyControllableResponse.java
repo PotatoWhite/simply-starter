@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
-@Import({ControllableAdvice.class})
+@Import({SimplyControllableAdvice.class})
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
 @Configuration
-public @interface GeneralControllableResponse {
+public @interface SimplyControllableResponse {
 }

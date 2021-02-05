@@ -10,14 +10,14 @@ io/crcell/simply/controllable/AbstractControllable.java
 io/crcell/simply/eventable/EventableEntity.java
  io.crcell.simply.eventable.EventableEntity
  io.crcell.simply.eventable.EventableEntity$Type
-io/crcell/simply/controllable/ErrorResponse.java
- io.crcell.simply.controllable.ErrorResponse
-io/crcell/simply/eventable/consumer/Consumer.java
- io.crcell.simply.eventable.consumer.Consumer
+io/crcell/simply/controllable/SimplyErrorResponse.java
+ io.crcell.simply.controllable.SimplyErrorResponse
+io/crcell/simply/controllable/SimplyControllableAdvice.java
+ io.crcell.simply.controllable.SimplyControllableAdvice
 io/crcell/simply/eventable/producer/EnableSimplyProducer.java
  io.crcell.simply.eventable.producer.EnableSimplyProducer
-io/crcell/simply/controllable/GeneralControllableResponse.java
- io.crcell.simply.controllable.GeneralControllableResponse
+io/crcell/simply/eventable/consumer/SimplyConsumer.java
+ io.crcell.simply.eventable.consumer.SimplyConsumer
 io/crcell/simply/utils/GsonTools.java
  io.crcell.simply.utils.GsonTools
  io.crcell.simply.utils.GsonTools$1
@@ -28,10 +28,6 @@ io/crcell/simply/controllable/SimplyLogging.java
  io.crcell.simply.controllable.SimplyLogging
 io/crcell/simply/utils/JsonConverter.java
  io.crcell.simply.utils.JsonConverter
-io/crcell/simply/eventable/consumer/AbstractConsumer.java
- io.crcell.simply.eventable.consumer.AbstractConsumer
-io/crcell/simply/controllable/ControllableAdvice.java
- io.crcell.simply.controllable.ControllableAdvice
 io/crcell/simply/clientable/AbstractClientable.java
  io.crcell.simply.clientable.AbstractClientable
 io/crcell/simply/eventable/producer/repository/ProducibleRepository.java
@@ -42,6 +38,10 @@ io/crcell/simply/controllable/SimplyLoggingAspect.java
  io.crcell.simply.controllable.SimplyLoggingAspect
 io/crcell/simply/SimplySpec.java
  io.crcell.simply.SimplySpec
+io/crcell/simply/eventable/consumer/AbstractSimplyConsumer.java
+ io.crcell.simply.eventable.consumer.AbstractSimplyConsumer
+io/crcell/simply/controllable/SimplyControllableResponse.java
+ io.crcell.simply.controllable.SimplyControllableResponse
 io/crcell/simply/serviceable/AbstractServiceable.java
  io.crcell.simply.serviceable.AbstractServiceable
 io/crcell/simply/eventable/config/KafkaProducerConfig.java
