@@ -22,8 +22,9 @@ public class AbstractClientable<T, ID> implements SimplySpec<T, ID> {
     private WebClient client;
     private Class<T>  entityTypeClass;
 
-    public AbstractClientable(Class<T> typeParameterClass) {
+    public AbstractClientable(Class<T> typeParameterClass, WebClient client) {
         this.entityTypeClass = typeParameterClass;
+        this.client          = client;
     }
 
     private Throwable makeException(SimplyErrorResponse errorbody) {
@@ -110,7 +111,14 @@ public class AbstractClientable<T, ID> implements SimplySpec<T, ID> {
 
     @Override
     public void deleteById(ID id) throws Throwable {
-
+        String path = "/" + id.toString();
+        client.delete()
+              .uri(path)
+              .retrieve()
+              .onStatus(status -> !status.equals(HttpStatus.NO_CONTENT), clientResponse -> clientResponse.bodyToMono(SimplyErrorResponse.class)
+                                                                                                         .flatMap(errorbody -> Mono.error(makeException(errorbody))))
+              .bodyToMono(Void.class)
+              .block();
     }
 
     @Override
