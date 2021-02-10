@@ -1,2 +1,5 @@
-rootProject.name = 'simply-starter'
-
+rootProject.name = 'simply'
+include('simply-serviceable')
+include('simply-controllable')
+include('simply-eventable')
+include('simply-clientable')

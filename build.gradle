@@ -1,23 +1,17 @@
-plugins {
-    id 'org.springframework.boot' version '2.4.1'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id 'java'
-    id 'maven'
-    id 'maven-publish'
-    id 'java-library'
+buildscript {
+    ext {
+        springBootVersion = '2.4.1'
+        springDependencyManagementVersion = '1.0.10.RELEASE'
+    }
 }
 
-group 'io.crcell'
-version '0.0.5-SNAPSHOT'
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    id 'java'
+    id 'maven-publish'
+    id 'java-library'
 
-bootJar.enabled(false)
-jar {
-    enabled(true)
-    into("META-INF/maven/$project.group}/$project.name") {
-        println "$project.group:$project.name:${this.version}"
-        from { generatePomFileForMavenJavaPublication }
-        rename ".*", "pom.xml"
-    }
 }
 
 repositories {
@@ -25,36 +19,86 @@ repositories {
     mavenLocal()
 }
 
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId group
-            artifactId this.name
-            version version
-
-            from components.java
-        }
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
     }
 }
 
 
-dependencies {
-    api group: 'org.reflections', name: 'reflections', version: '0.9.12'
-    api 'com.google.code.gson:gson:2.8.6'
-    api 'org.springframework.kafka:spring-kafka'
+bootJar.enabled(false)
+jar.enabled(false)
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+allprojects {
+    group 'io.easywalk'
+    version '0.0.1-SNAPSHOT'
 }
 
-test {
-    useJUnitPlatform()
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
+        implementation 'com.google.code.gson:gson:2.8.6'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
+
+    task initSourceFolders {
+        sourceSets*.java.srcDirs*.each {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+        }
+        sourceSets*.resources.srcDirs*.each {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+        }
+
+        def gradleFile = new File(projectDir, "build.gradle")
+        if (!gradleFile.exists())
+            gradleFile.text = ""
+    }
+}
+
+project(':simply-serviceable') {
+
+}
+
+project(':simply-controllable') {
+    dependencies {
+        compile project(':simply-serviceable')
+    }
+}
+
+project(':simply-eventable') {
+    dependencies {
+        compile project(':simply-serviceable')
+    }
+}
+
+project(':simply-clientable') {
+    dependencies {
+        compile project(':simply-serviceable')
+    }
 }

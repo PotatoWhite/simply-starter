@@ -1,0 +1,42 @@
+apply plugin: 'maven-publish'
+apply plugin: 'java'
+//apply plugin: 'java-library'
+
+
+bootJar.enabled(false)
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId(project.group)
+            artifactId(project.name)
+            version(project.version)
+
+            from components.java
+        }
+    }
+}
+
+jar {
+    enabled(true)
+    into("META-INF/maven/$project.group/$project.name") {
+        println "${project.group}:$project.name:${project.version}"
+
+        from { generatePomFileForMavenJavaPublication }
+        rename ".*", "pom.xml"
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+}

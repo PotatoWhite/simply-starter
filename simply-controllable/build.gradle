@@ -1,0 +1,37 @@
+apply plugin: 'maven-publish'
+apply plugin: 'java'
+
+
+bootJar.enabled(false)
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId(project.group)
+            artifactId(project.name)
+            version(project.version)
+
+            from components.java
+        }
+    }
+}
+
+jar {
+    enabled(true)
+    into("META-INF/maven/$project.group/$project.name") {
+        println "${project.group}:$project.name:${project.version}"
+
+        from { generatePomFileForMavenJavaPublication }
+        rename ".*", "pom.xml"
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
