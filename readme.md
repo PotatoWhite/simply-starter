@@ -2,6 +2,7 @@
 
 Simply은 Spring 기반의 Restful API, Event-Driven 개발시 중복적인 코드를 줄여 준다. 중복적인 코드를 줄임으로써 Application 개발자가 Project의 목적인 Business
 Logic에 더 집중할 수 있게 하는 것이 목적이다.
+* 관련한 사용 예제는 https://github.com/PotatoWhite/simply-demo-user 를 참고하여 주세요.
 
 ## Features
 
@@ -54,32 +55,27 @@ simply:
 
 - 특정 Entity의 관리를 목적으로하는 CRUD 기능을 자동화한다.
 
-### Serviceable Method
+### Serviceable Spec
 
-- Entity 관리를 위한 Method는 다음과 같다.
+- Entity 관리를 위헤 Simply Spec을 다음과 같이 정의 했다.
 
 ```java
-  // create
-  Optional<T1> create(T1 entity)throws EntityExistsException;
+public interface SimplySpec<T, ID> {
+    T create(T createForm) throws Throwable;
 
-        // retrieve
-        Optional<T1> retrieve(T2 id);
+    T replaceById(ID id, T replace) throws Throwable;
 
-        // retrieve all
-        List<T1> retrieveAll();
+    T updateById(ID id, Map<String, Object> fields) throws Throwable;
 
-        // update
-        Optional<T1> patch(T2 id,Map<String, Object> fields)throws GsonTools.JsonObjectExtensionConflictException;
+    T get(ID id) throws Throwable;
 
-        // delete
-        void deleteById(T2 id);
+    List<T> getAll() throws Throwable;
 
-        // delete
-        void delete(T1 entity);
+    void deleteById(ID id) throws Throwable;
 
-        // replace
-        Optional<T1> replace(T2 id,T1 replace);
-  ```
+    void delete(T entity) throws Throwable;
+}  
+```
 
 ### Serviceable Example
 
@@ -125,13 +121,13 @@ public class UserService extends AbstractServiceable<User, Long> {
 
 - Serviceable Bean을 기반으로 CRUD 기능을 RestfulAPI 형태로 expose 한다.
 
-### EnableControllable
+### EnableSimplyControllable
 
-* Using "@EnableControllable" annotation, activate controllable features.
+* Using "@EnableSimplyControllable" annotation, activate controllable features.
 
 ```java
 
-@EnableControllable
+@EnableSimplyControllable
 @SpringBootApplication
 public class Application {
 
@@ -166,18 +162,17 @@ public interface Controllable<T1, T2> {
 
 - Controllable 을 사용하기 위해서는 'AbstractControllable' 을 상속 받는다.
 - 상속받아 새로 만든 Class의 생성자를 통해 Servieable Bean을 주입한다.
-- @GeneralControllableResponse 은 Controller Advice를 활성화한다. Advice에서 에러처리는 하기 Response Code를 참조한다.
+- @SimplyControllableResponse 은 Controller Advice를 활성화한다. Advice에서 에러처리는 하기 Response Code를 참조한다.
 
 ```java
-
 @RestController
-@GeneralControllableResponse
+@SimplyControllableResponse
 @RequestMapping("/users")
 public class UserController extends AbstractControllable<User, Long> {
-
     public UserController(UserService service) {
         super(service);
     }
+
 }
 ```
 
@@ -208,17 +203,17 @@ public class UserController extends AbstractControllable<User, Long> {
 
 ## Eventable 의 구성
 
-* Entity의 Entity의 Ownership이 있는 Producer Application은 '@EnableProducible' annotation을 통해 활성화한다.
-* Entity를 사용하는 Consumer Application은 '@Enableroducible' annotation을 사용한다.
+* Entity의 Entity의 Ownership이 있는 Producer Application은 '@EnableSimplyProducer' annotation을 통해 활성화한다.
+* Entity를 사용하는 Consumer Application은 'AbstractSimplyConsumer' 를 상속받아 사용한다.
 
 ## Producer
 
-* Using "@EnableProducible" annotation, activate producer features.
+* Using "@EnableSimplyProducer" annotation, activate producer features.
 
 ```java
 
 @EnableKafka
-@EnableProducer
+@EnableSimplyProducer
 @SpringBootApplication
 public class Application {
 
@@ -251,12 +246,18 @@ public class User implements Eventable<Long> {
 }
 ```
 
-### ProducibleRepository 정의
+### @SimplyProducer Annotation
 
-* Kafka를 통해 Event를 전달할 Entity가 사용할 Repository를 ProducibleRepository를 사용한다.
+* Simply Serviceable 을 시용하는 Class를 정의할 때 @SimplyProducer를 사용해 Event를 발행할 Service를 구현할 수 있다.
 
 ```java
-public interface UserRepository extends ProducibleRepository<User, Long> {
+@SimplyProducer
+@Service
+public class UserService extends AbstractServiceable<User, Long> {
+
+    protected UserService(UserRepository repository) {
+        super(repository);
+    }
 }
 ```
 
@@ -289,27 +290,32 @@ public class User implements Eventable<Long> {
 
 ## Listener의 구현
 
-* Producer가 JPA를 이용해 repository에 save하거나 delete할 때마다 event 를 발행하고, Consumer는 AbstractConsumer을
+* Producer가 발행하 event는 AbstractConsumer를 통해 전달 받을 수 있다.
 
 ```java
-
 @Slf4j
 @Component
-public class UserListener extends AbstractConsumer<User, Long> {
+public class UserListener extends AbstractSimplyConsumer<User, Long> {
     protected UserListener() {
         super(User.class);
     }
 
     @Override
-    public User onSave(User entity) {
-        log.info("SAVE {}", entity.toString());
+    public User onUpdate(String key, User entity) {
+        log.info("UPDATE {}", entity.toString());
+        return null;
+    }
+
+    @Override
+    public User onCreate(String key, User entity) {
+        log.info("CREATE {}", entity.toString());
         return entity;
     }
 
     @Override
-    public Boolean onDelete(Long aLong) {
-        log.info("DELETE {}", aLong);
-        return true;
+    public Boolean onDelete(String key) {
+        log.info("DELETE {}", key);
+        return null;
     }
 }
 ```
