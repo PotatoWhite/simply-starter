@@ -1,6 +1,5 @@
-package io.easywalk.simply.eventable.producer.repository;
+package io.easywalk.simply.eventable.producer;
 
-import io.easywalk.simply.eventable.producer.Eventable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

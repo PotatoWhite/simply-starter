@@ -72,7 +72,7 @@ public class ProducibleAspect {
         }
     }
 
-    @AfterReturning(value = "execution(* io.easywalk.simply.eventable.producer.repository.ProducibleRepository.save(..))", returning = "entity")
+    @AfterReturning(value = "execution(* ProducibleRepository.save(..))", returning = "entity")
     private void publishSave(Eventable entity) throws RuntimeException {
         if (entity == null) {
             log.error("Entity could not be published (entity is null)");
@@ -82,7 +82,7 @@ public class ProducibleAspect {
         publish(entity.getClass().getName(), EventableEntity.Type.SAVE, entity.getId().toString(), entity);
     }
 
-    @AfterReturning(value = "execution(* io.easywalk.simply.eventable.producer.repository.ProducibleRepository.deleteById(..))")
+    @AfterReturning(value = "execution(* ProducibleRepository.deleteById(..))")
     private void publishDeleteById(JoinPoint point) throws RuntimeException {
         Object[] args  = point.getArgs();
         String   topic = getEntity((JpaRepository) point.getTarget()).getName();
@@ -91,7 +91,7 @@ public class ProducibleAspect {
         publish(topic, EventableEntity.Type.DELETE, id.toString(), null);
     }
 
-    @AfterReturning(value = "execution(* io.easywalk.simply.eventable.producer.repository.ProducibleRepository.delete(..))")
+    @AfterReturning(value = "execution(* ProducibleRepository.delete(..))")
     private void publishDelete(JoinPoint point) throws RuntimeException {
         Object[] args  = point.getArgs();
         String   topic = getEntity((JpaRepository) point.getTarget()).getName();

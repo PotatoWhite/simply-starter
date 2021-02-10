@@ -23,39 +23,39 @@ import java.util.stream.Collectors;
 public class SimplyControllableAdvice {
 
     @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<SimplyErrorResponse> handleConflict(EntityExistsException e) {
+    public ResponseEntity<SimplyErrorResponse> handle(EntityExistsException e) {
         return responseError(e, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<SimplyErrorResponse> handleNoContents(EntityNotFoundException e) {
+    public ResponseEntity<SimplyErrorResponse> handle(EntityNotFoundException e) {
         return responseError(e, HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<SimplyErrorResponse> handleNoSuchElementException(NoSuchElementException e) {
+    public ResponseEntity<SimplyErrorResponse> handle(NoSuchElementException e) {
         return responseError(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<SimplyErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException e) {
+    public ResponseEntity<SimplyErrorResponse> handle(DataIntegrityViolationException e) {
         return responseError(e, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<SimplyErrorResponse> handleInvalidArgumentException(MethodArgumentNotValidException e) {
+    public ResponseEntity<SimplyErrorResponse> handle(MethodArgumentNotValidException e) {
         String message = e.getFieldErrors().stream().map(field -> field.getField()).collect(Collectors.joining(","));
         message += " is invalid";
         return responseError(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<SimplyErrorResponse> handleUnknownException(Exception e) {
+    public ResponseEntity<SimplyErrorResponse> handle(Exception e) {
         return responseError(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(GsonTools.JsonObjectExtensionConflictException.class)
-    public ResponseEntity<SimplyErrorResponse> handleGsonConflictException(GsonTools.JsonObjectExtensionConflictException e) {
+    public ResponseEntity<SimplyErrorResponse> handle(GsonTools.JsonObjectExtensionConflictException e) {
         return responseError(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

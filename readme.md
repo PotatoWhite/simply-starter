@@ -1,4 +1,4 @@
-# Simply - Serviceable, Controllable, Eventable
+# Simply - Serviceable, Controllable, Eventable, Clientable
 
 Simply은 Spring 기반의 Restful API, Event-Driven 개발시 중복적인 코드를 줄여 준다. 중복적인 코드를 줄임으로써 Application 개발자가 Project의 목적인 Business
 Logic에 더 집중할 수 있게 하는 것이 목적이다.
@@ -8,9 +8,11 @@ Logic에 더 집중할 수 있게 하는 것이 목적이다.
 - Serviceable : Jpa 기반 Entity의 기본적인 CRUD를 생성한다.
 - Controllable : Serviceable 기반의 Restful API를 생성한다.
 - Eventable : Kafka를 통해 Entity의 변경시 다른 서비스로 변경을 알린다.
+- Clientable : Kafka를 통해 Entity의 변경시 다른 서비스로 변경을 알린다.
 
-기본적으로 Simply은 Spring Framework을 이용한 Restful API를 개발하는 것을 추상화한다. 추상화하는 내역으로는 @Service로 대표되는 Service, @RestConroller로 대표되는
-Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로한 Service에서의 Event Listener를 제공한다.
+기본적으로 Simply은 spring framework을 이용한 Restful API 등을 개발 할 때 도움이 되고자 한다. 추상화하는 내역으로는 @Service로 대표되는 Service,
+@RestConroller로 대표되는 Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로한 Service에서의 Event Listener를 제공한다. 또한 부가적으로
+Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 원격의 Restful API를 호출하여 사용할 수 있게 한다.
 
 ## Build
 
@@ -26,7 +28,7 @@ Controllable 마지막으로 Event Driven을 위한 Entity변경 시 필요로�
 ```groovy
 [@ build.gradle]
 
-implementation 'io.crcell:simply-starter:0.0.2-SNAPSHOT'
+implementation 'io.easywalk:simply-serviceable:0.0.1-SNAPSHOT'
 
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -42,7 +44,7 @@ implementation 'org.springframework.boot:spring-boot-starter-validation'
 ```yaml
 simply:
   eventable:
-    entity-base-package: io.crcell.demo.entities
+    entity-base-package: io.easywalk.demo.entities
     topic-property:
       number-of-replicas: 1
       number-of-partitions: 10
@@ -184,21 +186,20 @@ public class UserController extends AbstractControllable<User, Long> {
 |Method|ResponseCode|Reason|Comment|
 |---|---|---|---|
 |POST|201 Created|성공|
-|POST|400 Bad Request|실패|규격 오류|
-|POST|409 Conflict|실패|이미 존재함|
 |PUT|200 OK|성공|
-|PUT|404 Not Found|실패|컨텐츠 미존재|
 |PATCH|200 OK|성공|
-|PATCH|404 No Contents|실패|컨텐츠 미존재|
-|PATCH|400 Bad Request|실패|규격 오류|
 |DELETE|204 No Contents|성공||
-|DELETE|404 Not Found|실패|컨텐츠 미존|
 
 ### Controllable의 처리실패 Response Code
 
-|ResponseCode|Reason|Comment|
-|---|---|---|
-|500 Internal Server Error|실패|
+|Method|ResponseCode|Reason|Comment|
+|---|---|---|---|
+|POST|400 Bad Request|실패|규격 오류|
+|POST|409 Conflict|실패|이미 존재함|
+|PUT|404 Not Found|실패|컨텐츠 미존재|
+|PATCH|404 No Contents|실패|컨텐츠 미존재|
+|PATCH|400 Bad Request|실패|규격 오류|
+|undefined|500 Internal Server Error|실패|
 
 # Eventable
 

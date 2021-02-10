@@ -45,23 +45,17 @@ public class SimplyLoggingAspect {
     }
 
     @AfterReturning(value = "@annotation(SimplyLogging)", returning = "ret")
-    private void loggingResponse(Object ret) {
-        try {
-            HttpServletRequest  request  = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-            log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), ret.toString());
-        } catch (Exception e) {
-        }
+    private void loggingResponse(Object ret) throws RuntimeException {
+        HttpServletRequest  request  = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+        log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), ret.toString());
     }
 
     @AfterThrowing(value = "@annotation(SimplyLogging)", throwing = "exception")
-    private void loggingError(Exception exception) {
-        try {
-            StringWriter writer = new StringWriter();
-            exception.printStackTrace(new PrintWriter(writer));
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            log.debug("[ERR] {} {} Param:{}, trace:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), writer.toString());
-        } catch (Exception e) {
-        }
+    private void loggingError(Exception exception) throws RuntimeException {
+        StringWriter writer = new StringWriter();
+        exception.printStackTrace(new PrintWriter(writer));
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        log.debug("[ERR] {} {} Param:{}, trace:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), writer.toString());
     }
 }
