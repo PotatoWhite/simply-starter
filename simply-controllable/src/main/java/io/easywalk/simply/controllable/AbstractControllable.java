@@ -65,7 +65,13 @@ public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable ID id) throws Throwable {
-//        checkEntityExistenceAndThrow(id);
+        try {
+            checkEntityExistenceAndThrow(id);
+        } catch (NoSuchElementException e) {
+            //for idempotency
+            return;
+        }
+
         service.deleteById(id);
     }
 

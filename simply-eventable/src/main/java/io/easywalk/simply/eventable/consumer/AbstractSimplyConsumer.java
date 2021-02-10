@@ -31,7 +31,10 @@ public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T>
     }
 
     @Override
-    public abstract T onSave(String key, T entity);
+    public abstract T onCreate(String key, T entity);
+
+    @Override
+    public abstract T onUpdate(String key, T entity);
 
     @Override
     public abstract Boolean onDelete(String key);

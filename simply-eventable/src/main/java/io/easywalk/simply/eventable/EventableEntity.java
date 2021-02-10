@@ -15,6 +15,6 @@ public class EventableEntity<T, ID> {
     private T      payload;
 
     public enum Type {
-        SAVE, DELETE
+        CREATE, UPDATE, DELETE
     }
 }

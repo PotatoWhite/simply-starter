@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 @Slf4j
 @Aspect
@@ -48,7 +49,7 @@ public class SimplyLoggingAspect {
     private void loggingResponse(Object ret) throws RuntimeException {
         HttpServletRequest  request  = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-        log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), ret.toString());
+        log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), Optional.ofNullable(ret).orElse("Response body is empty"));
     }
 
     @AfterThrowing(value = "@annotation(SimplyLogging)", throwing = "exception")

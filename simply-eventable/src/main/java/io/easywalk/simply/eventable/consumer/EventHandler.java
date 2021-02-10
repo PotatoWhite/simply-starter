@@ -22,10 +22,13 @@ public class EventHandler<ID, T> implements MessageListener<ID, EventableEntity<
 
         switch (message.value()
                        .getEventType()) {
-            case SAVE:
-                T entity = mapper.convertValue(message.value()
-                                                      .getPayload(), type);
-                simplyConsumer.onSave(message.value().getKey(), entity);
+            case CREATE:
+                T create = mapper.convertValue(message.value().getPayload(), type);
+                simplyConsumer.onCreate(message.value().getKey(), create);
+                break;
+            case UPDATE:
+                T update = mapper.convertValue(message.value().getPayload(), type);
+                simplyConsumer.onUpdate(message.value().getKey(), update);
                 break;
             case DELETE:
                 simplyConsumer.onDelete(message.value().getKey());
