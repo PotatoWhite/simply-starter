@@ -30,6 +30,9 @@ Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 
 [@ build.gradle]
 
 implementation 'io.easywalk:simply-serviceable:0.0.1-SNAPSHOT'
+implementation 'io.easywalk:simply-controllable:0.0.1-SNAPSHOT'
+implementation 'io.easywalk:simply-eventable:0.0.1-SNAPSHOT'
+implementation 'io.easywalk:simply-clientable:0.0.1-SNAPSHOT'
 
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 implementation 'org.springframework.boot:spring-boot-starter-validation'
