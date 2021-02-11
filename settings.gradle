@@ -1,5 +1,5 @@
 rootProject.name = 'simply'
 include('simply-serviceable')
 include('simply-controllable')
-include('simply-eventable')
+include('simply-eventable-kafka-binder')
 include('simply-clientable')

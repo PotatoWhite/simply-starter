@@ -91,7 +91,7 @@ project(':simply-controllable') {
     }
 }
 
-project(':simply-eventable') {
+project(':simply-eventable-kafka-binder') {
     dependencies {
         compile project(':simply-serviceable')
     }
