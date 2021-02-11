@@ -1,7 +1,7 @@
 package io.easywalk.simply.clientable;
 
-import io.easywalk.simply.SimplyErrorResponse;
-import io.easywalk.simply.SimplySpec;
+import io.easywalk.simply.controllable.SimplyErrorResponse;
+import io.easywalk.simply.specification.SimplySpec;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

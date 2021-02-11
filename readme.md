@@ -2,6 +2,7 @@
 
 Simply은 Spring 기반의 Restful API, Event-Driven 개발시 중복적인 코드를 줄여 준다. 중복적인 코드를 줄임으로써 Application 개발자가 Project의 목적인 Business
 Logic에 더 집중할 수 있게 하는 것이 목적이다.
+
 * 관련한 사용 예제는 https://github.com/PotatoWhite/simply-demo-user 를 참고하여 주세요.
 
 ## Features
@@ -25,18 +26,17 @@ Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 
 ```
 
 ## 사용방법
+
 - gradle 을 이용해 사용한다.
 
 ```groovy
 [build.gradle]
 
+implementation 'io.easywalk:simply-common:0.0.1-SNAPSHOT'
 implementation 'io.easywalk:simply-serviceable:0.0.1-SNAPSHOT'
 implementation 'io.easywalk:simply-controllable:0.0.1-SNAPSHOT'
 implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.1-SNAPSHOT'
 implementation 'io.easywalk:simply-clientable:0.0.1-SNAPSHOT'
-
-implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-implementation 'org.springframework.boot:spring-boot-starter-validation'
 ```
 
 ## 설정
@@ -55,14 +55,11 @@ simply:
       number-of-partitions: 10
 ```
 
-## Serviceable
+## simply-common
 
-- 특정 Entity의 관리를 목적으로하는 CRUD 기능을 자동화한다.
+- simply 에서 제공하고자 하는 Spec wjddml gksek.
 
-### Serviceable Spec
-
-- Entity 관리를 위헤 Simply Spec을 다음과 같이 정의 했다.
-- 해당 Spec은 Simply를 사용하는 controllable에서도 이용된다.
+### SimplySpec
 
 ```java
 public interface SimplySpec<T, ID> {
@@ -81,6 +78,10 @@ public interface SimplySpec<T, ID> {
     void delete(T entity) throws Throwable;
 }  
 ```
+
+## Serviceable
+
+- 특정 Entity의 관리를 목적으로하는 CRUD 기능을 자동화한다.
 
 ### Serviceable Example
 
@@ -170,6 +171,7 @@ public interface Controllable<T1, T2> {
 - @SimplyControllableResponse 은 Controller Advice를 활성화한다. Advice에서 에러처리는 하기 Response Code를 참조한다.
 
 ```java
+
 @RestController
 @SimplyControllableResponse
 @RequestMapping("/users")
@@ -255,6 +257,7 @@ public class User implements Eventable<Long> {
 * Simply Serviceable 을 시용하는 Class를 정의할 때 @SimplyProducer를 사용해 Event를 발행할 Service를 구현할 수 있다.
 
 ```java
+
 @SimplyProducer
 @Service
 public class UserService extends AbstractServiceable<User, Long> {
@@ -297,6 +300,7 @@ public class User implements Eventable<Long> {
 * Producer가 발행하 event는 AbstractConsumer를 통해 전달 받을 수 있다.
 
 ```java
+
 @Slf4j
 @Component
 public class UserListener extends AbstractSimplyConsumer<User, Long> {

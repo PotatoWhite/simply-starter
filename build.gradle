@@ -81,24 +81,38 @@ subprojects {
     }
 }
 
-project(':simply-serviceable') {
 
+project(':simply-common') {
+
+}
+
+project(':simply-controllable-common') {
+
+}
+
+project(':simply-serviceable') {
+    dependencies {
+        implementation project(':simply-common')
+    }
 }
 
 project(':simply-controllable') {
     dependencies {
-        compile project(':simply-serviceable')
+        implementation project(':simply-common')
+        implementation project(':simply-controllable-common')
+        implementation project(':simply-serviceable')
     }
 }
 
 project(':simply-eventable-kafka-binder') {
     dependencies {
-        compile project(':simply-serviceable')
+        implementation project(':simply-serviceable')
     }
 }
 
 project(':simply-clientable') {
     dependencies {
-        compile project(':simply-serviceable')
+        implementation project(':simply-common')
+        implementation project(':simply-controllable-common')
     }
 }

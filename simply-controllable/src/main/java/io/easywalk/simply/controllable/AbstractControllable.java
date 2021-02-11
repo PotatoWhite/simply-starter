@@ -1,7 +1,7 @@
 package io.easywalk.simply.controllable;
 
-import io.easywalk.simply.SimplySpec;
 import io.easywalk.simply.serviceable.AbstractServiceable;
+import io.easywalk.simply.specification.SimplySpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

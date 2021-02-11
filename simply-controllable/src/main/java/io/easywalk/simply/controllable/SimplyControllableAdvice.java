@@ -1,6 +1,5 @@
 package io.easywalk.simply.controllable;
 
-import io.easywalk.simply.SimplyErrorResponse;
 import io.easywalk.simply.utils.GsonTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

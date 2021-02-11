@@ -1,6 +1,4 @@
 apply plugin: 'maven-publish'
-apply plugin: 'java'
-
 
 bootJar.enabled(false)
 
@@ -29,11 +27,4 @@ jar {
 repositories {
     mavenCentral()
     mavenLocal()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework:spring-aspects'
-    implementation 'org.springframework:spring-tx'
-    implementation 'jakarta.persistence:jakarta.persistence-api'
 }

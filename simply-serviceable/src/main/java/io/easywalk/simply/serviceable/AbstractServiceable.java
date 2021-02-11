@@ -1,6 +1,6 @@
 package io.easywalk.simply.serviceable;
 
-import io.easywalk.simply.SimplySpec;
+import io.easywalk.simply.specification.SimplySpec;
 import io.easywalk.simply.utils.GsonTools;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-/**
- * P-ramework(PostatoWhite) / 2021-01-06
- */
+
 public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
     protected final JpaRepository<T, ID> repository;
 
