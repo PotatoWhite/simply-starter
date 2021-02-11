@@ -1,7 +1,7 @@
-package io.easywalk.simply.eventable.producer;
+package io.easywalk.simply.eventable.kafka.producer;
 
-import io.easywalk.simply.eventable.EventableEntity;
-import io.easywalk.simply.eventable.config.KafkaProducerConfig;
+import io.easywalk.simply.eventable.kafka.EventableEntity;
+import io.easywalk.simply.eventable.kafka.config.KafkaProducerConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -82,26 +82,26 @@ public class ProducibleAspect {
     }
 
 
-    @AfterReturning(value = "@target(io.easywalk.simply.eventable.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.create(..))", returning = "entity")
+    @AfterReturning(value = "@target(io.easywalk.simply.eventable.kafka.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.create(..))", returning = "entity")
     private void publishCreate(Eventable entity) throws RuntimeException {
         if (isValid(entity)) return;
         publish(entity.getClass().getName(), EventableEntity.Type.CREATE, entity.getId().toString(), entity);
     }
 
-    @AfterReturning(pointcut = "@target(io.easywalk.simply.eventable.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.updateById(..))", returning = "entity")
+    @AfterReturning(pointcut = "@target(io.easywalk.simply.eventable.kafka.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.updateById(..))", returning = "entity")
     private void publishUpdate(Eventable entity) throws RuntimeException {
         if (isValid(entity)) return;
         publish(entity.getClass().getName(), EventableEntity.Type.UPDATE, entity.getId().toString(), entity);
     }
 
-    @AfterReturning(value = "@target(io.easywalk.simply.eventable.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.replaceById(..))", returning = "entity")
+    @AfterReturning(value = "@target(io.easywalk.simply.eventable.kafka.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.replaceById(..))", returning = "entity")
     private void publishReplace(Eventable entity) throws RuntimeException {
         if (isValid(entity)) return;
         publish(entity.getClass().getName(), EventableEntity.Type.UPDATE, entity.getId().toString(), entity);
     }
 
 
-    @AfterReturning(value = "@target(io.easywalk.simply.eventable.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.deleteById(..))")
+    @AfterReturning(value = "@target(io.easywalk.simply.eventable.kafka.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.deleteById(..))")
     private void publishDeleteById(JoinPoint point) throws RuntimeException {
         Object[] args  = point.getArgs();
         String   topic = getEntity(point.getTarget()).getName();
@@ -110,7 +110,7 @@ public class ProducibleAspect {
         publish(topic, EventableEntity.Type.DELETE, id.toString(), null);
     }
 
-    @AfterReturning(value = "@target(io.easywalk.simply.eventable.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.delete(..))")
+    @AfterReturning(value = "@target(io.easywalk.simply.eventable.kafka.producer.SimplyProducer) && execution(* io.easywalk.simply.serviceable.AbstractServiceable.delete(..))")
     private void publishDelete(JoinPoint point) throws RuntimeException {
         Object[] args  = point.getArgs();
         String   topic = getEntity(point.getTarget()).getName();

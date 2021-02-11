@@ -1,8 +1,8 @@
-package io.easywalk.simply.eventable.config;
+package io.easywalk.simply.eventable.kafka.config;
 
 
-import io.easywalk.simply.eventable.EventableEntity;
-import io.easywalk.simply.eventable.producer.Eventable;
+import io.easywalk.simply.eventable.kafka.EventableEntity;
+import io.easywalk.simply.eventable.kafka.producer.Eventable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

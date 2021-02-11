@@ -1,6 +1,6 @@
-package io.easywalk.simply.eventable.consumer;
+package io.easywalk.simply.eventable.kafka.consumer;
 
-import io.easywalk.simply.eventable.EventableEntity;
+import io.easywalk.simply.eventable.kafka.EventableEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

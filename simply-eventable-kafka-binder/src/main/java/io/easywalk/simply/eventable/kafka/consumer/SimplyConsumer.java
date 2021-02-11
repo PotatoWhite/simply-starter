@@ -1,4 +1,4 @@
-package io.easywalk.simply.eventable.consumer;
+package io.easywalk.simply.eventable.kafka.consumer;
 
 public interface SimplyConsumer<T> {
     T onCreate(String key, T entity);

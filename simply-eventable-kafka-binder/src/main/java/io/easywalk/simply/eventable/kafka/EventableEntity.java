@@ -1,4 +1,4 @@
-package io.easywalk.simply.eventable;
+package io.easywalk.simply.eventable.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

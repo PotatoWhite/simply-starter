@@ -25,13 +25,14 @@ Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 
 ```
 
 ## 사용방법
+- gradle 을 이용해 사용한다.
 
 ```groovy
-[@ build.gradle]
+[build.gradle]
 
 implementation 'io.easywalk:simply-serviceable:0.0.1-SNAPSHOT'
 implementation 'io.easywalk:simply-controllable:0.0.1-SNAPSHOT'
-implementation 'io.easywalk:simply-eventable:0.0.1-SNAPSHOT'
+implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.1-SNAPSHOT'
 implementation 'io.easywalk:simply-clientable:0.0.1-SNAPSHOT'
 
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -61,6 +62,7 @@ simply:
 ### Serviceable Spec
 
 - Entity 관리를 위헤 Simply Spec을 다음과 같이 정의 했다.
+- 해당 Spec은 Simply를 사용하는 controllable에서도 이용된다.
 
 ```java
 public interface SimplySpec<T, ID> {
@@ -215,7 +217,6 @@ public class UserController extends AbstractControllable<User, Long> {
 
 ```java
 
-@EnableKafka
 @EnableSimplyProducer
 @SpringBootApplication
 public class Application {

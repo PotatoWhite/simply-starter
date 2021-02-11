@@ -1,4 +1,4 @@
-package io.easywalk.simply.eventable.producer;
+package io.easywalk.simply.eventable.kafka.producer;
 
 import javax.persistence.MappedSuperclass;
 

@@ -1,4 +1,4 @@
-package io.easywalk.simply.eventable.producer;
+package io.easywalk.simply.eventable.kafka.producer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

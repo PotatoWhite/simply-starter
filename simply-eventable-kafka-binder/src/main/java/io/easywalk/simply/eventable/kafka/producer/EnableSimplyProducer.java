@@ -1,6 +1,6 @@
-package io.easywalk.simply.eventable.producer;
+package io.easywalk.simply.eventable.kafka.producer;
 
-import io.easywalk.simply.eventable.config.KafkaProducerConfig;
+import io.easywalk.simply.eventable.kafka.config.KafkaProducerConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.EnableKafka;

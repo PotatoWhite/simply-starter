@@ -1,7 +1,7 @@
-package io.easywalk.simply.eventable.consumer;
+package io.easywalk.simply.eventable.kafka.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.easywalk.simply.eventable.EventableEntity;
+import io.easywalk.simply.eventable.kafka.EventableEntity;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.listener.MessageListener;
 
