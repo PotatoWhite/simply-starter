@@ -18,11 +18,11 @@ Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 
 
 ## Build
 
-* 현재 저장소가 없어 Maven Local을 이용한다.
-* 본소스를 gradle을 이용해 Build하고 MavenLocal에 배포한다.
-
-```shell
-> gradle clean build publishToMavenLocal
+Maven 중앙 Repository로 부터 Library를 가져온다.
+```groovy
+repositories {
+    mavenCentral()
+}
 ```
 
 ## 사용방법
@@ -32,11 +32,11 @@ Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 
 ```groovy
 [build.gradle]
 
-implementation 'io.easywalk:simply-common:0.0.1-SNAPSHOT'
-implementation 'io.easywalk:simply-serviceable:0.0.1-SNAPSHOT'
-implementation 'io.easywalk:simply-controllable:0.0.1-SNAPSHOT'
-implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.1-SNAPSHOT'
-implementation 'io.easywalk:simply-clientable:0.0.1-SNAPSHOT'
+implementation 'io.easywalk:simply-common:0.0.1.RELEASE'
+implementation 'io.easywalk:simply-serviceable:0.0.1.RELEASE'
+implementation 'io.easywalk:simply-controllable:0.0.1.RELEASE'
+implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.1.RELEASE'
+implementation 'io.easywalk:simply-clientable:0.0.1.RELEASE'
 ```
 
 ## 설정
@@ -57,7 +57,7 @@ simply:
 
 ## simply-common
 
-- simply 에서 제공하고자 하는 Spec wjddml gksek.
+- simply 에서 제공하고자 하는 Spec 정의.
 
 ### SimplySpec
 
