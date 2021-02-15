@@ -42,7 +42,7 @@ public class SimplyLoggingAspect {
             }
         }
 
-        log.info("[REQ] {} {} Param:{} RequestBody:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody);
+        log.info("[REQ] {} {} Param:{}, RequestBody:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody);
     }
 
     @AfterReturning(value = "@annotation(SimplyLogging)", returning = "ret")
