@@ -9,6 +9,8 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'java'
+    id 'maven'
+    id 'signing'
     id 'maven-publish'
     id 'java-library'
 
@@ -27,7 +29,7 @@ configurations {
 
 
 bootJar.enabled(false)
-jar.enabled(false)
+jar.enabled(true)
 
 allprojects {
     group 'io.easywalk'
@@ -38,6 +40,8 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'signing'
 
     sourceCompatibility = '11'
     targetCompatibility = '11'
@@ -79,6 +83,25 @@ subprojects {
         if (!gradleFile.exists())
             gradleFile.text = ""
     }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
 }
 
 

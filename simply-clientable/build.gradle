@@ -34,3 +34,48 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Simply Serviceable'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'Simply-starter'
+                url 'https://github.com/PotatoWhite/simply-starter.git'
+
+                scm {
+                    connection 'https://github.com/PotatoWhite/simply-starter.git'
+                    developerConnection 'https://github.com/PotatoWhite/simply-starter/discussions'
+                    url 'https://github.com/PotatoWhite/simply-starter.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'bravopotato'
+                        name 'Dongju Paek'
+                        email 'bravopotato@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
