@@ -1,6 +1,8 @@
 package io.easywalk.simply.serviceable;
 
 import io.easywalk.simply.specification.SimplySpec;
+import io.easywalk.simply.specification.annotation.SimplyProducer2;
+import io.easywalk.simply.specification.annotation.SimplyProducerId;
 import io.easywalk.simply.utils.GsonTools;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +24,7 @@ public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
 
 
     // create
+    @SimplyProducer2("CREATE")
     @Override
     public T create(T entity) throws EntityExistsException, DataIntegrityViolationException {
         return repository.save(entity);
@@ -35,26 +38,30 @@ public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
     }
 
     // update
+    @SimplyProducer2("UPDATE")
     @Override
-    public T updateById(ID id, Map<String, Object> fields) throws Throwable {
+    public T updateById(@SimplyProducerId ID id, Map<String, Object> fields) throws Throwable {
         return repository.save(GsonTools.merge(get(id), fields));
     }
 
     // delete
+    @SimplyProducer2("DELETE")
     @Override
-    public void deleteById(ID id) {
+    public void deleteById(@SimplyProducerId ID id) {
         repository.deleteById(id);
     }
 
     // delete
+    @SimplyProducer2("DELETE")
     @Override
     public void delete(T entity) {
         repository.delete(entity);
     }
 
     // replace
+    @SimplyProducer2("UPDATE")
     @Override
-    public T replaceById(ID id, T replace) throws EntityNotFoundException {
+    public T replaceById(@SimplyProducerId ID id, T replace) throws EntityNotFoundException {
         T retrieved = get(id);
         BeanUtils.copyProperties(replace, retrieved, "id");
         return repository.save(retrieved);

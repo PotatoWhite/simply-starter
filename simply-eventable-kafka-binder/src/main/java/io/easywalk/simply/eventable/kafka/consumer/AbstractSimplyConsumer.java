@@ -31,13 +31,7 @@ public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T>
     }
 
     @Override
-    public abstract T onCreate(String key, T entity);
-
-    @Override
-    public abstract T onUpdate(String key, T entity);
-
-    @Override
-    public abstract Boolean onDelete(String key);
+    public abstract T on(String eventType, String key, T entity);
 
     @Bean
     public void messageListenerContainer() {

@@ -11,10 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EventableEntity<T, ID> {
     private String key;
-    private Type   eventType;
+    private String   eventType;
     private T      payload;
-
-    public enum Type {
-        CREATE, UPDATE, DELETE
-    }
 }
