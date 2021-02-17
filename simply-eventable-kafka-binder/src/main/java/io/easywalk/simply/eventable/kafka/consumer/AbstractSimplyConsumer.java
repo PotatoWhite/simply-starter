@@ -1,6 +1,6 @@
 package io.easywalk.simply.eventable.kafka.consumer;
 
-import io.easywalk.simply.eventable.kafka.EventableEntity;
+import io.easywalk.simply.eventable.kafka.SimplyEventableMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,24 +20,26 @@ import java.util.Map;
 @Slf4j
 @MappedSuperclass
 public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T> {
-    protected Class<T>        type;
+    protected String   topic;
+    protected Class<T> type;
     @Value("${spring.application.name}")
-    private   String          groupId;
+    private String groupId;
     @Autowired
-    private   KafkaProperties kafkaProperties;
+    private KafkaProperties kafkaProperties;
 
-    protected AbstractSimplyConsumer(Class<T> type) {
-        this.type = type;
+    protected AbstractSimplyConsumer(String topic, Class<T> type) {
+        this.topic = topic;
+        this.type  = type;
     }
 
     @Override
-    public abstract T on(String eventType, String key, T entity);
+    public abstract void on(SimplyEventableMessage message);
 
     @Bean
     public void messageListenerContainer() {
-        ContainerProperties containerProps = new ContainerProperties(type.getName());
+        ContainerProperties containerProps = new ContainerProperties(topic);
         containerProps.setMessageListener(new EventHandler<ID, T>(type, this));
-        KafkaMessageListenerContainer<ID, EventableEntity<T, ID>> container = createContainer(containerProps);
+        KafkaMessageListenerContainer<ID, SimplyEventableMessage<T, ID>> container = createContainer(containerProps);
         container.setBeanName(type.getName() + "ListenerBean");
         container.start();
     }
@@ -51,16 +53,16 @@ public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T>
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, EventableEntity.class.getPackageName());
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, SimplyEventableMessage.class.getPackageName());
 
         return props;
     }
 
 
-    private KafkaMessageListenerContainer<ID, EventableEntity<T, ID>> createContainer(ContainerProperties containerProps) {
-        Map<String, Object>                                       props     = consumerProps();
-        DefaultKafkaConsumerFactory<ID, EventableEntity<T, ID>>   cf        = new DefaultKafkaConsumerFactory<>(props);
-        KafkaMessageListenerContainer<ID, EventableEntity<T, ID>> container = new KafkaMessageListenerContainer<>(cf, containerProps);
+    private KafkaMessageListenerContainer<ID, SimplyEventableMessage<T, ID>> createContainer(ContainerProperties containerProps) {
+        Map<String, Object>                                              props     = consumerProps();
+        DefaultKafkaConsumerFactory<ID, SimplyEventableMessage<T, ID>>   cf        = new DefaultKafkaConsumerFactory<>(props);
+        KafkaMessageListenerContainer<ID, SimplyEventableMessage<T, ID>> container = new KafkaMessageListenerContainer<>(cf, containerProps);
 
         return container;
     }

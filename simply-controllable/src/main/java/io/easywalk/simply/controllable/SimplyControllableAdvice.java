@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice(annotations = SimplyControllableResponse.class)
 public class SimplyControllableAdvice {
+
+    @PostConstruct
+    public void init() {
+        log.info("SimplyControllableAdvice initiated");
+    }
 
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<SimplyErrorResponse> handle(EntityExistsException e) {

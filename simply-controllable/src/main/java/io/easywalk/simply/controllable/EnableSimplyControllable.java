@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-@Import({SimplyControllableAdvice.class, SimplyLoggingAspect.class})
+@Import({SimplyControllableAdvice.class, SimplyWebLoggingAspect.class})
 @Configuration
 public @interface EnableSimplyControllable {
 }

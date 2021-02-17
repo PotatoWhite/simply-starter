@@ -19,6 +19,7 @@ Client모듈을 제공해 개발자가 마치 로컬 메소드를 호출하 듯 
 ## Build
 
 Maven 중앙 Repository로 부터 Library를 가져온다.
+
 ```groovy
 repositories {
     mavenCentral()
@@ -32,11 +33,11 @@ repositories {
 ```groovy
 [build.gradle]
 
-implementation 'io.easywalk:simply-common:0.0.1.RELEASE'
-implementation 'io.easywalk:simply-serviceable:0.0.1.RELEASE'
-implementation 'io.easywalk:simply-controllable:0.0.1.RELEASE'
-implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.1.RELEASE'
-implementation 'io.easywalk:simply-clientable:0.0.1.RELEASE'
+implementation 'io.easywalk:simply-common:0.0.2-SNAPSHOT'
+implementation 'io.easywalk:simply-serviceable:0.0.2-SNAPSHOT'
+implementation 'io.easywalk:simply-controllable:0.0.2-SNAPSHOT'
+implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.2-SNAPSHOT'
+implementation 'io.easywalk:simply-clientable:0.0.2-SNAPSHOT'
 ```
 
 ## 설정
@@ -239,7 +240,7 @@ public class Application {
 @Setter
 @ToString
 @Entity
-public class User implements Eventable<Long> {
+public class User implements SimplyEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

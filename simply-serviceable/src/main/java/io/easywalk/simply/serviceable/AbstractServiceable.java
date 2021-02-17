@@ -1,8 +1,9 @@
 package io.easywalk.simply.serviceable;
 
 import io.easywalk.simply.specification.SimplySpec;
-import io.easywalk.simply.specification.annotation.SimplyProducer2;
-import io.easywalk.simply.specification.annotation.SimplyProducerId;
+import io.easywalk.simply.specification.eventable.annotations.SimplyProducer;
+import io.easywalk.simply.specification.eventable.annotations.SimplyProducerId;
+import io.easywalk.simply.specification.serviceable.annotations.SimplyEntity;
 import io.easywalk.simply.utils.GsonTools;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,9 +14,10 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
-public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
+public abstract class AbstractServiceable<T extends SimplyEntity, ID> implements SimplySpec<T, ID> {
     protected final JpaRepository<T, ID> repository;
 
     protected AbstractServiceable(JpaRepository<T, ID> repository) {
@@ -24,7 +26,7 @@ public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
 
 
     // create
-    @SimplyProducer2("CREATE")
+    @SimplyProducer("CREATE")
     @Override
     public T create(T entity) throws EntityExistsException, DataIntegrityViolationException {
         return repository.save(entity);
@@ -38,28 +40,30 @@ public abstract class AbstractServiceable<T, ID> implements SimplySpec<T, ID> {
     }
 
     // update
-    @SimplyProducer2("UPDATE")
+    @SimplyProducer("UPDATE")
     @Override
     public T updateById(@SimplyProducerId ID id, Map<String, Object> fields) throws Throwable {
         return repository.save(GsonTools.merge(get(id), fields));
     }
 
     // delete
-    @SimplyProducer2("DELETE")
+    @SimplyProducer("DELETE")
     @Override
     public void deleteById(@SimplyProducerId ID id) {
-        repository.deleteById(id);
+        Optional<T> byId = repository.findById(id);
+        byId.ifPresent(repository::delete);
     }
 
     // delete
-    @SimplyProducer2("DELETE")
+    @SimplyProducer("DELETE")
     @Override
     public void delete(T entity) {
-        repository.delete(entity);
+        Optional<T> byId = repository.findById((ID) entity.getId());
+        byId.ifPresent(repository::delete);
     }
 
     // replace
-    @SimplyProducer2("UPDATE")
+    @SimplyProducer("UPDATE")
     @Override
     public T replaceById(@SimplyProducerId ID id, T replace) throws EntityNotFoundException {
         T retrieved = get(id);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -22,10 +23,14 @@ import java.util.Optional;
 @Slf4j
 @Aspect
 @Component
-public class SimplyLoggingAspect {
+public class SimplyWebLoggingAspect {
 
+    @PostConstruct
+    public void init() {
+        log.info("SimplyWebLoggingAspect initiated");
+    }
 
-    @Before(value = "@annotation(SimplyLogging)")
+    @Before(value = "@annotation(io.easywalk.simply.controllable.SimplyWebLogging)")
     private void loggingRequest(JoinPoint jp) {
         HttpServletRequest request     = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         Object             requestBody = null;
@@ -45,14 +50,14 @@ public class SimplyLoggingAspect {
         log.info("[REQ] {} {} Param:{}, RequestBody:{}", request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody);
     }
 
-    @AfterReturning(value = "@annotation(SimplyLogging)", returning = "ret")
+    @AfterReturning(value = "@annotation(io.easywalk.simply.controllable.SimplyWebLogging)", returning = "ret")
     private void loggingResponse(Object ret) throws RuntimeException {
         HttpServletRequest  request  = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
         log.info("[RES] {} {} Param:{}, Response:{} {}", request.getMethod(), request.getRequestURI(), request.getQueryString(), response.getStatus(), Optional.ofNullable(ret).orElse("Response body is empty"));
     }
 
-    @AfterThrowing(value = "@annotation(SimplyLogging)", throwing = "exception")
+    @AfterThrowing(value = "@annotation(io.easywalk.simply.controllable.SimplyWebLogging)", throwing = "exception")
     private void loggingError(Exception exception) throws RuntimeException {
         StringWriter writer = new StringWriter();
         exception.printStackTrace(new PrintWriter(writer));

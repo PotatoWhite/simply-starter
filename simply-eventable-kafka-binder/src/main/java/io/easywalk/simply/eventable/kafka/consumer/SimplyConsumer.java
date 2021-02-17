@@ -1,5 +1,7 @@
 package io.easywalk.simply.eventable.kafka.consumer;
 
+import io.easywalk.simply.eventable.kafka.SimplyEventableMessage;
+
 public interface SimplyConsumer<T> {
-    T on(String eventType, String key, T entity);
+    void on(SimplyEventableMessage message);
 }

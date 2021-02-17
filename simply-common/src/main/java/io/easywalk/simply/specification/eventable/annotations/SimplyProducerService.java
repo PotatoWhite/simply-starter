@@ -1,4 +1,4 @@
-package io.easywalk.simply.eventable.kafka.producer;
+package io.easywalk.simply.specification.eventable.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SimplyProducer {
+public @interface SimplyProducerService {
+    String value();
 }

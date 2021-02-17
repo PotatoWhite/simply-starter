@@ -1,4 +1,4 @@
-package io.easywalk.simply.specification.annotation;
+package io.easywalk.simply.specification.eventable.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -32,6 +32,8 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'junit:junit:4.12'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-databind'

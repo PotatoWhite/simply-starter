@@ -1,4 +1,4 @@
-package io.easywalk.simply.specification.annotation;
+package io.easywalk.simply.controllable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SimplyProducer2 {
-    String value();
+public @interface SimplyWebLogging {
 }

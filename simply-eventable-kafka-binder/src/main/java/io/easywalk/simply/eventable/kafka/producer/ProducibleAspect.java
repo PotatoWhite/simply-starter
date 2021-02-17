@@ -1,16 +1,18 @@
 package io.easywalk.simply.eventable.kafka.producer;
 
-import io.easywalk.simply.eventable.kafka.EventableEntity;
+import io.easywalk.simply.eventable.kafka.SimplyEventableMessage;
 import io.easywalk.simply.eventable.kafka.config.KafkaProducerConfig;
-import io.easywalk.simply.specification.annotation.SimplyProducer2;
+import io.easywalk.simply.specification.eventable.annotations.SimplyProducer;
+import io.easywalk.simply.specification.eventable.annotations.SimplyProducerService;
+import io.easywalk.simply.specification.serviceable.annotations.SimplyEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +29,6 @@ public class ProducibleAspect {
 
     private final KafkaProducerConfig kafkaConfig;
     private final KafkaTemplate       kafkaTemplate;
-
-    @PostConstruct
-    private void init(){
-        log.info("ProducibleAspect loaded");
-    }
 
     public ProducibleAspect(KafkaProducerConfig kafkaConfig, @Qualifier("eventableEntityKafkaTemplate") KafkaTemplate kafkaTemplate) {
         this.kafkaConfig   = kafkaConfig;
@@ -78,7 +75,12 @@ public class ProducibleAspect {
         }
     }
 
-    private boolean isValid(Eventable entity) {
+    @PostConstruct
+    private void init() {
+        log.info("ProducibleAspect initiated");
+    }
+
+    private boolean isValid(SimplyEntity entity) {
         if (entity == null) {
             log.error("Entity could not be published (entity is null)");
             return true;
@@ -86,64 +88,86 @@ public class ProducibleAspect {
         return false;
     }
 
+    private String getTopic(JoinPoint call) {
+        return call.getTarget().getClass().getAnnotation(SimplyProducerService.class).value();
+    }
+
+    private String getEventType(JoinPoint call) {
+        MethodSignature signature = (MethodSignature) call.getSignature();
+        Method          method    = signature.getMethod();
+        return method.getAnnotation(SimplyProducer.class).value();
+    }
+
+    @Pointcut("@annotation(io.easywalk.simply.specification.eventable.annotations.SimplyProducer) && @target(io.easywalk.simply.specification.eventable.annotations.SimplyProducerService)")
+    public void producibleAnnotations() {
+    }
+
     // 반환이 Eventable 이거나 void 일때만 Publishing이 가능 하다.
-    @AfterReturning(value = "@annotation(io.easywalk.simply.specification.annotation.SimplyProducer2) && execution(Object *(..))", returning = "entity")
-    private void publishCreate(JoinPoint call, Eventable entity) throws RuntimeException {
+    @AfterReturning(value = "producibleAnnotations() && execution(* *(..))", returning = "entity")
+    private void publishCreate(JoinPoint call, SimplyEntity entity) throws RuntimeException {
         // entity가 null이면 할게 없어.
         if (entity == null) return;
 
-        SimplyProducer2 caller = getSimplyProducer(call);
-
         // payload가 없는 경우
-        publish(getEntity(call.getTarget()).getName()
-                , caller.value()
+        publish(getTopic(call)
+                , getEventType(call)
                 , entity.getId().toString()
                 , entity);
     }
 
-    // 반환이 void 일 경우는 첫번째 Param이 ID Type이 어야 한다.
-    @AfterReturning(value = "@annotation(io.easywalk.simply.specification.annotation.SimplyProducer2) && execution(void *(..)) && args(entity)")
-    private void publish(JoinPoint call, Eventable entity) throws RuntimeException {
-        SimplyProducer2 caller = getSimplyProducer(call);
+    /**
+     * 반환이 void 이면서 args가 entity가 있다면, entity의 id만 취하고 payload는 비운다.
+     * 단순히 Event 만 전달한다.
+     */
+    // delete
+    @AfterReturning(value = "producibleAnnotations() && execution(void *(..)) && args(entity)")
+    private void publish(JoinPoint call, SimplyEntity entity) throws RuntimeException {
+        SimplyProducer caller = getSimplyProducer(call);
 
-        publish(getEntity(call.getTarget()).getName()
-                , caller.value()
-                , entity.toString()
-                , entity);
+        publish(getTopic(call)
+                , getEventType(call)
+                , entity.getId().toString()
+                , null);
     }
 
-    @AfterReturning(value = "@annotation(io.easywalk.simply.specification.annotation.SimplyProducer2) && execution(void *(.., @io.easywalk.simply.specification.annotation.SimplyProducerId (*), ..)) && args(id)")
+    // deleteById
+    @AfterReturning(value = "producibleAnnotations() && execution(void *(.., @io.easywalk.simply.specification.eventable.annotations.SimplyProducerId (*), ..)) && args(id)")
     private void publish(JoinPoint call, Object id) throws RuntimeException {
-        SimplyProducer2 caller = getSimplyProducer(call);
+        SimplyProducer caller = getSimplyProducer(call);
 
-        publish(getEntity(call.getTarget()).getName()
-                , caller.value()
+        publish(getTopic(call)
+                , getEventType(call)
                 , id.toString()
                 , null);
     }
 
 
-    @AfterReturning(value = "@annotation(io.easywalk.simply.specification.annotation.SimplyProducer2) && execution(* *(.., @io.easywalk.simply.specification.annotation.SimplyProducerId (*), ..)) && args(id)", returning = "entity")
-    private void publish(JoinPoint call, Object id, Eventable entity) throws RuntimeException {
-        SimplyProducer2 caller = getSimplyProducer(call);
-
-        publish(getEntity(call.getTarget()).getName()
-                , caller.value()
+    // replaceById
+    @AfterReturning(value = "producibleAnnotations() && execution(* *(.., @io.easywalk.simply.specification.eventable.annotations.SimplyProducerId (*), ..)) && args(id)", returning = "entity")
+    private void publish(JoinPoint call, Object id, SimplyEntity entity) throws RuntimeException {
+        publish(getTopic(call)
+                , getEventType(call)
                 , id.toString()
                 , entity);
     }
 
-    private SimplyProducer2 getSimplyProducer(JoinPoint call) {
+    private SimplyProducer getSimplyProducer(JoinPoint call) {
         MethodSignature signature = (MethodSignature) call.getSignature();
         Method          method    = signature.getMethod();
-        return method.getAnnotation(SimplyProducer2.class);
+        return method.getAnnotation(SimplyProducer.class);
     }
 
-    @Async
-    public void publish(String topic, String type, String key, Eventable entity) {
+    public void publish(String topic, String type, String key, SimplyEntity entity) {
+        SimplyEventableMessage message = null;
 
-        EventableEntity message = new EventableEntity(key, type, entity);
+        if (entity == null)
+            message = new SimplyEventableMessage(key, type, null, null);
+        else
+            message = new SimplyEventableMessage(key, type, entity.getClass().getName(), entity);
+
+        log.info("[PUB] {} {}", topic, message);
+
         // publish to specific partition
-        kafkaTemplate.send(topic, key.hashCode() % kafkaConfig.getNumPartitions(), key, message);
+        kafkaTemplate.send(topic, Math.abs(key.hashCode() % kafkaConfig.getNumPartitions()), key, message);
     }
 }

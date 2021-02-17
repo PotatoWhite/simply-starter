@@ -1,8 +1,8 @@
 package io.easywalk.simply.eventable.kafka.config;
 
 
-import io.easywalk.simply.eventable.kafka.EventableEntity;
-import io.easywalk.simply.eventable.kafka.producer.Eventable;
+import io.easywalk.simply.eventable.kafka.SimplyEventableMessage;
+import io.easywalk.simply.specification.eventable.annotations.SimplyProducerService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @Getter
@@ -47,18 +46,20 @@ public class KafkaProducerConfig {
     @PostConstruct
     public void initialize() {
         createTopics();
+        log.info("KafkaProducerConfig initiated");
     }
 
     private void createTopics() {
-        Reflections                     reflections = new Reflections(basePackage);
-        Set<Class<? extends Eventable>> subTypesOf  = reflections.getSubTypesOf(Eventable.class);
+        Reflections reflections = new Reflections(basePackage);
+        var         subTypesOf  = reflections.getTypesAnnotatedWith(SimplyProducerService.class);
 
         ConfigurableBeanFactory factory = (ConfigurableBeanFactory) beanFactory;
 
         subTypesOf.stream()
                   .forEach(item -> {
                       this.topics.put(item, item.getName());
-                      NewTopic newTopic = new NewTopic(item.getName(), numPartitions, numReplicas);
+                      SimplyProducerService annotation = item.getAnnotation(SimplyProducerService.class);
+                      NewTopic              newTopic   = new NewTopic(annotation.value(), numPartitions, numReplicas);
                       factory.registerSingleton(item.getName() + "topic", newTopic);
                       log.info("Topic created {} : {} : {}", item.getName(), numPartitions, numReplicas);
                   });
@@ -66,7 +67,7 @@ public class KafkaProducerConfig {
 
 
     @Bean("eventableProducerFactory")
-    public ProducerFactory<String, EventableEntity> eventableProducerFactory() {
+    public ProducerFactory<String, SimplyEventableMessage> eventableProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -75,7 +76,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean("eventableEntityKafkaTemplate")
-    public KafkaTemplate<String, EventableEntity> eventableEntityKafkaTemplate() {
+    public KafkaTemplate<String, SimplyEventableMessage> eventableEntityKafkaTemplate() {
         return new KafkaTemplate<>(eventableProducerFactory());
     }
 }

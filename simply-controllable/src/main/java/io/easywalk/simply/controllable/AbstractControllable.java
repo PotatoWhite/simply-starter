@@ -2,6 +2,7 @@ package io.easywalk.simply.controllable;
 
 import io.easywalk.simply.serviceable.AbstractServiceable;
 import io.easywalk.simply.specification.SimplySpec;
+import io.easywalk.simply.specification.serviceable.annotations.SimplyEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
-public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
+public abstract class AbstractControllable<T extends SimplyEntity, ID> implements SimplySpec<T, ID> {
 
 
     private final AbstractServiceable<T, ID> service;
 
     @Override
-    @SimplyLogging
+    @SimplyWebLogging
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public T create(@Valid @RequestBody T createForm) throws Throwable {
@@ -27,7 +28,7 @@ public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
     }
 
     @Override
-    @SimplyLogging
+    @SimplyWebLogging
     @PutMapping("/{id}")
     public T replaceById(@PathVariable ID id, @RequestBody @Valid T replace) throws Throwable {
         checkEntityExistenceAndThrow(id);
@@ -35,7 +36,7 @@ public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
     }
 
     @Override
-    @SimplyLogging
+    @SimplyWebLogging
     @PatchMapping("/{id}")
     public T updateById(@PathVariable ID id, @RequestBody Map<String, Object> fields) throws Throwable {
         checkEntityExistenceAndThrow(id);
@@ -61,7 +62,7 @@ public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
 
 
     @Override
-    @SimplyLogging
+    @SimplyWebLogging
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable ID id) throws Throwable {
@@ -75,9 +76,19 @@ public abstract class AbstractControllable<T, ID> implements SimplySpec<T, ID> {
         service.deleteById(id);
     }
 
+    @SimplyWebLogging
+    @DeleteMapping()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Override
-    public void delete(T entity) throws Throwable {
-        // not use in controller
+    public void delete(@RequestBody T entity) throws Throwable {
+        try {
+            checkEntityExistenceAndThrow((ID) entity.getId());
+        } catch (NoSuchElementException e) {
+            //for idempotency
+            return;
+        }
+
+        service.deleteById((ID) entity.getId());
     }
 
     private void checkEntityExistenceAndThrow(@PathVariable ID id) throws NoSuchElementException {

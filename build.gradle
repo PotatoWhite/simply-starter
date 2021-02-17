@@ -30,7 +30,7 @@ jar.enabled(true)
 
 allprojects {
     group 'io.easywalk'
-    version '0.0.2-SNAPSHOT'
+    version '0.0.4-SNAPSHOT'
 }
 
 subprojects {
@@ -106,10 +106,6 @@ project(':simply-common') {
 
 }
 
-project(':simply-controllable-common') {
-
-}
-
 project(':simply-serviceable') {
     dependencies {
         implementation project(':simply-common')
@@ -119,7 +115,6 @@ project(':simply-serviceable') {
 project(':simply-controllable') {
     dependencies {
         implementation project(':simply-common')
-        implementation project(':simply-controllable-common')
         implementation project(':simply-serviceable')
     }
 }
@@ -134,6 +129,5 @@ project(':simply-eventable-kafka-binder') {
 project(':simply-clientable') {
     dependencies {
         implementation project(':simply-common')
-        implementation project(':simply-controllable-common')
     }
 }
