@@ -4,7 +4,7 @@ import io.easywalk.simply.eventable.kafka.SimplyEventableMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.listener.MessageListener;
 
-public class EventHandler<ID, T> implements MessageListener<ID, SimplyEventableMessage<T, ID>> {
+public class EventHandler<ID, T> implements MessageListener<ID, SimplyEventableMessage<T>> {
 
     private final Class<T>          type;
     private final SimplyConsumer<T> simplyConsumer;
@@ -15,7 +15,7 @@ public class EventHandler<ID, T> implements MessageListener<ID, SimplyEventableM
     }
 
     @Override
-    public void onMessage(ConsumerRecord<ID, SimplyEventableMessage<T, ID>> message) {
+    public void onMessage(ConsumerRecord<ID, SimplyEventableMessage<T>> message) {
         if (message.value() == null) return;
         simplyConsumer.on(message.value());
     }

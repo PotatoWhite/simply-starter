@@ -89,6 +89,7 @@ public class ProducibleAspect {
     }
 
     private String getTopic(JoinPoint call) {
+
         return call.getTarget().getClass().getAnnotation(SimplyProducerService.class).value();
     }
 

@@ -30,7 +30,7 @@ jar.enabled(true)
 
 allprojects {
     group 'io.easywalk'
-    version '0.0.4-SNAPSHOT'
+    version '0.0.5-SNAPSHOT'
 }
 
 subprojects {

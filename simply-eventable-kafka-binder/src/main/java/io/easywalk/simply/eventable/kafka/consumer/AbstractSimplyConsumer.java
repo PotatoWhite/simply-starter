@@ -1,5 +1,7 @@
 package io.easywalk.simply.eventable.kafka.consumer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.easywalk.simply.eventable.kafka.SimplyEventableMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -20,12 +22,14 @@ import java.util.Map;
 @Slf4j
 @MappedSuperclass
 public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T> {
-    protected String   topic;
-    protected Class<T> type;
+    protected ObjectMapper mapper = new ObjectMapper();
+
+    protected String          topic;
+    protected Class<T>        type;
     @Value("${spring.application.name}")
-    private String groupId;
+    private   String          groupId;
     @Autowired
-    private KafkaProperties kafkaProperties;
+    private   KafkaProperties kafkaProperties;
 
     protected AbstractSimplyConsumer(String topic, Class<T> type) {
         this.topic = topic;
@@ -33,13 +37,13 @@ public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T>
     }
 
     @Override
-    public abstract void on(SimplyEventableMessage message);
+    public abstract void on(SimplyEventableMessage<T> message);
 
     @Bean
     public void messageListenerContainer() {
         ContainerProperties containerProps = new ContainerProperties(topic);
         containerProps.setMessageListener(new EventHandler<ID, T>(type, this));
-        KafkaMessageListenerContainer<ID, SimplyEventableMessage<T, ID>> container = createContainer(containerProps);
+        KafkaMessageListenerContainer<ID, SimplyEventableMessage<T>> container = createContainer(containerProps);
         container.setBeanName(type.getName() + "ListenerBean");
         container.start();
     }
@@ -59,11 +63,16 @@ public abstract class AbstractSimplyConsumer<T, ID> implements SimplyConsumer<T>
     }
 
 
-    private KafkaMessageListenerContainer<ID, SimplyEventableMessage<T, ID>> createContainer(ContainerProperties containerProps) {
-        Map<String, Object>                                              props     = consumerProps();
-        DefaultKafkaConsumerFactory<ID, SimplyEventableMessage<T, ID>>   cf        = new DefaultKafkaConsumerFactory<>(props);
-        KafkaMessageListenerContainer<ID, SimplyEventableMessage<T, ID>> container = new KafkaMessageListenerContainer<>(cf, containerProps);
+    private KafkaMessageListenerContainer<ID, SimplyEventableMessage<T>> createContainer(ContainerProperties containerProps) {
+        Map<String, Object>                                          props     = consumerProps();
+        DefaultKafkaConsumerFactory<ID, SimplyEventableMessage<T>>   cf        = new DefaultKafkaConsumerFactory<>(props);
+        KafkaMessageListenerContainer<ID, SimplyEventableMessage<T>> container = new KafkaMessageListenerContainer<>(cf, containerProps);
 
         return container;
+    }
+
+    protected T convertToEntity(Object source, Class<T> clazz) throws JsonProcessingException {
+        String s = mapper.writeValueAsString(source);
+        return mapper.readValue(s, clazz);
     }
 }
