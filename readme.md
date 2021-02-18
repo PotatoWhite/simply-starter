@@ -33,11 +33,11 @@ repositories {
 ```groovy
 [build.gradle]
 
-implementation 'io.easywalk:simply-common:0.0.2-SNAPSHOT'
-implementation 'io.easywalk:simply-serviceable:0.0.2-SNAPSHOT'
-implementation 'io.easywalk:simply-controllable:0.0.2-SNAPSHOT'
-implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.2-SNAPSHOT'
-implementation 'io.easywalk:simply-clientable:0.0.2-SNAPSHOT'
+implementation 'io.easywalk:simply-common:0.0.2.RELASE'
+implementation 'io.easywalk:simply-serviceable:0.0.2.RELASE'
+implementation 'io.easywalk:simply-controllable:0.0.2.RELASE'
+implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.2.RELASE'
+implementation 'io.easywalk:simply-clientable:0.0.2.RELASE'
 ```
 
 ## 설정
@@ -255,11 +255,12 @@ public class User implements SimplyEntity<Long> {
 
 ### @SimplyProducer Annotation
 
-* Simply Serviceable 을 시용하는 Class를 정의할 때 @SimplyProducer를 사용해 Event를 발행할 Service를 구현할 수 있다.
+* Simply Serviceable 을 시용하는 Service Class를 정의할 때 @SimplyProducer를 사용해 Event를 발행할 Service를 구현할 수 있다.
+* @SimplyProducer("user") 발행될 Topic은 "user" 와 같이 지정한다.
 
 ```java
 
-@SimplyProducer
+@SimplyProducer("user")
 @Service
 public class UserService extends AbstractServiceable<User, Long> {
 
@@ -283,9 +284,8 @@ public class UserService extends AbstractServiceable<User, Long> {
 @Setter
 @ToString
 @Entity
-public class User implements Eventable<Long> {
+public class User implements SimplyEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -298,33 +298,36 @@ public class User implements Eventable<Long> {
 
 ## Listener의 구현
 
-* Producer가 발행하 event는 AbstractConsumer를 통해 전달 받을 수 있다.
+* Producer가 발행하 event는 AbstractSimplyConsumer 통해 전달 받을 수 있다.
 
+### SimplyConsumer를 이용한 Entity 복제 예시
 ```java
-
 @Slf4j
 @Component
 public class UserListener extends AbstractSimplyConsumer<User, Long> {
-    protected UserListener() {
-        super(User.class);
-    }
+    private static String         TOPIC = "user";
+    private final  UserRepository repository;
 
-    @Override
-    public User onUpdate(String key, User entity) {
-        log.info("UPDATE {}", entity.toString());
-        return null;
+    protected UserListener(UserRepository repository) {
+        super(TOPIC, User.class);
+        this.repository = repository;
     }
-
+    
+    @SneakyThrows
     @Override
-    public User onCreate(String key, User entity) {
-        log.info("CREATE {}", entity.toString());
-        return entity;
-    }
-
-    @Override
-    public Boolean onDelete(String key) {
-        log.info("DELETE {}", key);
-        return null;
+    public void on(SimplyEventableMessage<User> message) {
+        switch (message.getEventType()) {
+            case "CREATE":
+            case "UPDATE":
+                User user = convertToEntity(message.getPayload(), User.class);
+                repository.save(user);
+                break;
+            case "DELETE":
+                repository.deleteById(Long.valueOf(message.getKey()));
+                break;
+            default:
+                log.error("messsage {}", message);
+        }
     }
 }
 ```
