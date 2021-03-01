@@ -3,7 +3,8 @@
 Simply은 Spring 기반의 Restful API, Event-Driven 개발시 중복적인 코드를 줄여 준다. 중복적인 코드를 줄임으로써 Application 개발자가 Project의 목적인 Business
 Logic에 더 집중할 수 있게 하는 것이 목적이다.
 
-* 관련한 사용 예제는 https://github.com/PotatoWhite/simply-demo-user 를 참고하여 주세요.
+* Quickstart 관련한 사용 예제는 https://github.com/PotatoWhite/simply-quickstart 를 참고하여 주세요.
+* Kafka Binder 관련한 사용 예제는 https://github.com/PotatoWhite/simply-messaging-producer , https://github.com/PotatoWhite/simply-messaging-consumer 를 참고하여 주세요.
 
 ## Features
 
