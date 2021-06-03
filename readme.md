@@ -34,11 +34,11 @@ repositories {
 ```groovy
 [build.gradle]
 
-implementation 'io.easywalk:simply-common:0.0.3.RELEASE'
-implementation 'io.easywalk:simply-serviceable:0.0.3.RELEASE'
-implementation 'io.easywalk:simply-controllable:0.0.3.RELEASE'
-implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.3.RELEASE'
-implementation 'io.easywalk:simply-clientable:0.0.3.RELEASE'
+implementation 'io.easywalk:simply-common:0.0.4.RELEASE'
+implementation 'io.easywalk:simply-serviceable:0.0.4.RELEASE'
+implementation 'io.easywalk:simply-controllable:0.0.4.RELEASE'
+implementation 'io.easywalk:simply-eventable-kafka-binder:0.0.4.RELEASE'
+implementation 'io.easywalk:simply-clientable:0.0.4.RELEASE'
 ```
 
 ## 설정
