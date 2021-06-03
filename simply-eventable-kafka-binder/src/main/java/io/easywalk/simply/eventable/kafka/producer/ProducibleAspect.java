@@ -66,7 +66,7 @@ public class ProducibleAspect {
             Class<?> componentClass = getClass(componentType);
             if (componentClass != null) {
                 return Array.newInstance(componentClass, 0)
-                            .getClass();
+                        .getClass();
             } else {
                 return null;
             }

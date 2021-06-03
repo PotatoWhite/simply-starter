@@ -11,14 +11,14 @@ import static io.easywalk.simply.utils.GsonTools.ConflictStrategy.PREFER_SECOND_
 public class GsonTools {
 
     public static void extendJsonObject(JsonObject destinationObject, ConflictStrategy conflictResolutionStrategy, ArrayStrategy arrayStrategy, JsonObject... objs)
-    throws JsonObjectExtensionConflictException {
+            throws JsonObjectExtensionConflictException {
         for (JsonObject obj : objs) {
             extendJsonObject(destinationObject, obj, conflictResolutionStrategy, arrayStrategy);
         }
     }
 
     private static void extendJsonObject(JsonObject leftObj, JsonObject rightObj, ConflictStrategy conflictStrategy, ArrayStrategy arrayStrategy)
-    throws JsonObjectExtensionConflictException {
+            throws JsonObjectExtensionConflictException {
         for (Map.Entry<String, JsonElement> rightEntry : rightObj.entrySet()) {
             String      rightKey = rightEntry.getKey();
             JsonElement rightVal = rightEntry.getValue();
@@ -50,7 +50,7 @@ public class GsonTools {
     }
 
     private static void handleMergeConflict(String key, JsonObject leftObj, JsonElement leftVal, JsonElement rightVal, ConflictStrategy conflictStrategy)
-    throws JsonObjectExtensionConflictException {
+            throws JsonObjectExtensionConflictException {
         {
             switch (conflictStrategy) {
                 case PREFER_FIRST_OBJ:
@@ -76,9 +76,9 @@ public class GsonTools {
     public static <T> T merge(T obj, Map<String, Object> fields) throws JsonObjectExtensionConflictException {
         Gson gson = new GsonBuilder().create();
         JsonObject target = gson.toJsonTree(obj)
-                                .getAsJsonObject();
+                .getAsJsonObject();
         JsonObject patch = gson.toJsonTree(fields)
-                               .getAsJsonObject();
+                .getAsJsonObject();
         extendJsonObject(target, PREFER_SECOND_OBJ, REPLACE, patch);
 
         return (T) gson.fromJson(target.toString(), obj.getClass());
