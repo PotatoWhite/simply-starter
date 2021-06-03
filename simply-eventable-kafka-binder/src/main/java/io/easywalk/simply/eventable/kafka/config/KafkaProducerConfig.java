@@ -56,13 +56,13 @@ public class KafkaProducerConfig {
         ConfigurableBeanFactory factory = (ConfigurableBeanFactory) beanFactory;
 
         subTypesOf.stream()
-                  .forEach(item -> {
-                      this.topics.put(item, item.getName());
-                      SimplyProducerService annotation = item.getAnnotation(SimplyProducerService.class);
-                      NewTopic              newTopic   = new NewTopic(annotation.value(), numPartitions, numReplicas);
-                      factory.registerSingleton(item.getName() + "topic", newTopic);
-                      log.info("Topic created {} : {} : {}", item.getName(), numPartitions, numReplicas);
-                  });
+                .forEach(item -> {
+                    this.topics.put(item, item.getName());
+                    SimplyProducerService annotation = item.getAnnotation(SimplyProducerService.class);
+                    NewTopic              newTopic   = new NewTopic(annotation.value(), numPartitions, numReplicas);
+                    factory.registerSingleton(item.getName() + "topic", newTopic);
+                    log.info("Topic created {} : {} : {}", item.getName(), numPartitions, numReplicas);
+                });
     }
 
 
